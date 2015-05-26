@@ -1,0 +1,18 @@
+{
+    "name": "pmvc-plugin/url",
+    "description": "PMVC url utility",
+    "type": "library",
+    "homepage": "https://github.com/pmvc-plugin/url",
+    "keywords": ["url", "pmvc", "plug-in"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hill",
+            "email": "hill@kimo.com"
+        }
+    ],
+    "require": {
+        "pmvc/pmvc": "*"
+    },
+    "minimum-stability": "dev"
+}
