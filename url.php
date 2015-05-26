@@ -10,6 +10,15 @@ class _PMVC_PLUG_URL extends PMVC\PLUGIN
      */
      private $protocol=null;
 
+    /**
+     * set env
+     */
+     public function setEnv($arr)
+     {
+        foreach($arr as $key){
+            $this->set($key,getenv($key));
+        }
+     }
     
     /**
      * $att['url']
