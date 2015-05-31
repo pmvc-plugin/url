@@ -1,6 +1,6 @@
 <?php
 # plugin
-include_once('vendor/pmvc/pmvc/include_plug.php');
+PMVC\Load::plug();
 PMVC\setPlugInFolder('../');
 
 class UrlTest extends PHPUnit_Framework_TestCase
