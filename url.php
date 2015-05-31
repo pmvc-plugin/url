@@ -6,7 +6,6 @@ ${_INIT_CONFIG
 
 class url extends \PMVC\PlugIn
 {
-
     /**
      * Keep value to check now use http or https
      * @var string
@@ -18,12 +17,12 @@ class url extends \PMVC\PlugIn
      */
      public function setEnv($arr)
      {
-        foreach (\PMVC\toArray($arr) as $key) {
-            $this->set($key, getenv($key));
-        }
+         foreach (\PMVC\toArray($arr) as $key) {
+             $this->set($key, getenv($key));
+         }
      }
     
-        /**
+    /**
      * $att['url']
      * $att['action']
      * $att['del']
@@ -47,10 +46,10 @@ class url extends \PMVC\PlugIn
         }
 
 
-        public function getRunPhp()
-        {
-            return basename($this->get('SCRIPT_NAME'));
-        }
+    public function getRunPhp()
+    {
+        return basename($this->get('SCRIPT_NAME'));
+    }
 
 
         /**
@@ -77,20 +76,20 @@ class url extends \PMVC\PlugIn
         }
 
 
-        public function actionToUrl($action, $url=null)
-        {
-            $routing = PMVC\getOption(_ROUTING);
-            if ($routing) {
-                return PMVC\plug($routing)->actionToUrl($action, $url);
-            }
+    public function actionToUrl($action, $url=null)
+    {
+        $routing = PMVC\getOption(_ROUTING);
+        if ($routing) {
+            return PMVC\plug($routing)->actionToUrl($action, $url);
         }
+    }
 
-        public function realUrl()
-        {
-            $args =& func_get_args();
-            $url = call_user_func_array(array($this,'actionToUrl'), $args);
-            return $this->toHttp($url);
-        }
+    public function realUrl()
+    {
+        $args =& func_get_args();
+        $url = call_user_func_array(array($this,'actionToUrl'), $args);
+        return $this->toHttp($url);
+    }
 
         /**
     * get http or https
@@ -106,60 +105,60 @@ class url extends \PMVC\PlugIn
         }
 
 
-        public function tohttp($url, $type=null)
-        {
-            if (!preg_match('/^http/i', $url)) {
-                if (is_null($type)) {
-                    $type= $this->getProtocol();
-                }
-                $url = $type.'://'.$this->get('HTTP_HOST').$url;
+    public function tohttp($url, $type=null)
+    {
+        if (!preg_match('/^http/i', $url)) {
+            if (is_null($type)) {
+                $type= $this->getProtocol();
             }
-            return $url;
+            $url = $type.'://'.$this->get('HTTP_HOST').$url;
         }
+        return $url;
+    }
 
-        public function arrayToUrl($arr, $parent=null, $seprator=null, $isEncode=true)
-        {
-            if (!is_array($arr)) {
-                return null;
-            }
-            $seprator = $this->getSeparator($seprator);
-            foreach ($arr as $k=>$v) {
-                $newParent = $parent;
-                $newParent[] = $k;
-                if (is_array($v)) {
-                    $return.=(($return)?$seprator:'').$this->arrayToUrl($v, $newParent, $seprator, $isEncode);
-                    continue;
-                }
-                if (empty($parent)) {
-                    $newKey = $this->getEncode($k, $isEncode);
-                } else {
-                    $newKey = $this->getEncode($newParent[0], $isEncode);
-                    unset($newParent[0]);
-                    foreach ($newParent as $v1) {
-                        $newKey .='['.$this->getEncode($v1, $isEncode).']';
-                    }
-                }
-                $return.=(($return)?$seprator:'').$newKey.'='.$this->getEncode($v, $isEncode);
-            }
-            return $return;
+    public function arrayToUrl($arr, $parent=null, $seprator=null, $isEncode=true)
+    {
+        if (!is_array($arr)) {
+            return null;
         }
-
-        public function getEncode($string, $isEncode)
-        {
-            if ($isEncode) {
-                return urlencode($string);
+        $seprator = $this->getSeparator($seprator);
+        foreach ($arr as $k=>$v) {
+            $newParent = $parent;
+            $newParent[] = $k;
+            if (is_array($v)) {
+                $return.=(($return)?$seprator:'').$this->arrayToUrl($v, $newParent, $seprator, $isEncode);
+                continue;
+            }
+            if (empty($parent)) {
+                $newKey = $this->getEncode($k, $isEncode);
             } else {
-                return $string;
+                $newKey = $this->getEncode($newParent[0], $isEncode);
+                unset($newParent[0]);
+                foreach ($newParent as $v1) {
+                    $newKey .='['.$this->getEncode($v1, $isEncode).']';
+                }
             }
+            $return.=(($return)?$seprator:'').$newKey.'='.$this->getEncode($v, $isEncode);
         }
+        return $return;
+    }
 
-        public function getSeparator($seprator=null)
-        {
-            return (is_null($seprator))?_URL_SPLIT:$seprator;
+    public function getEncode($string, $isEncode)
+    {
+        if ($isEncode) {
+            return urlencode($string);
+        } else {
+            return $string;
         }
+    }
 
-        public function init()
-        {
-            $this->setEnv('SCRIPT_NAME');
-        }
+    public function getSeparator($seprator=null)
+    {
+        return (is_null($seprator))?_URL_SPLIT:$seprator;
+    }
+
+    public function init()
+    {
+        $this->setEnv('SCRIPT_NAME');
+    }
 }
