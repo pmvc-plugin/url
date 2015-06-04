@@ -159,6 +159,9 @@ class url extends \PMVC\PlugIn
 
     public function init()
     {
-        $this->setEnv('SCRIPT_NAME');
+        $this->setEnv(array(
+            'SCRIPT_NAME',
+            'REQUEST_URI'
+        ));
     }
 }
