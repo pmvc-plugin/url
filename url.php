@@ -1,8 +1,7 @@
 <?php
 namespace PMVC\PlugIn\url;
 
-${_INIT_CONFIG
-}[_CLASS] = 'PMVC\PlugIn\url\url';
+${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\url';
 
 class url extends \PMVC\PlugIn
 {
