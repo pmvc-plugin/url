@@ -9,6 +9,6 @@ class UrlTest extends PHPUnit_Framework_TestCase
     {
         $url = PMVC\plug('url');
         $url->setEnv(array('APP_ENV'));
-        $this->assertEquals('testing',$url->get('APP_ENV'));
+        $this->assertEquals('testing',$url['APP_ENV']);
     }
 }

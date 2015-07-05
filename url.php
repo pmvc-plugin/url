@@ -17,7 +17,7 @@ class url extends \PMVC\PlugIn
      public function setEnv($arr)
      {
          foreach (\PMVC\toArray($arr) as $key) {
-             $this->set($key, getenv($key));
+             $this[$key] = getenv($key);
          }
      }
     
@@ -27,52 +27,52 @@ class url extends \PMVC\PlugIn
      * $att['del']
      * $att['separator']
      */
-        public function getUrl($att=array())
-        {
-            $myUrl = $this->actionToUrl($att['action'], $att['url']);
-            $separator = $this->getSeparator($att['separator']);
-            $urls = parent::get(); //don't want effect $this->url
-            if (is_array($att['del'])) {
-                foreach ($att['del'] as $k) {
-                    unset($urls[$k]);
-                }
-            }
-            if (PMVC\n($urls)) {
-                return $myUrl.$seprator.$this->arrayToUrl($urls, null, $seprator);
-            } else {
-                return $myUrl;
+    public function getUrl($att=array())
+    {
+        $myUrl = $this->actionToUrl($att['action'], $att['url']);
+        $separator = $this->getSeparator($att['separator']);
+        $urls = \PMVC\get($this); //don't want effect $this->url
+        if (is_array($att['del'])) {
+            foreach ($att['del'] as $k) {
+                unset($urls[$k]);
             }
         }
+        if (PMVC\n($urls)) {
+            return $myUrl.$seprator.$this->arrayToUrl($urls, null, $seprator);
+        } else {
+            return $myUrl;
+        }
+    }
 
 
     public function getRunPhp()
     {
-        return basename($this->get('SCRIPT_NAME'));
+        return basename($this['SCRIPT_NAME']);
     }
 
 
-        /**
+    /**
      * Get path information from the environment.
      * @access public
      * @return string
      */
-        public function getPathInfo()
-        {
-            $uri = $this->get('REQUEST_URI');
-            if (false===strpos($uri, $this->get('SCRIPT_NAME'))) {
-                $start = strpos($uri, '?')+1;
-            } else {
-                $start = strpos($uri, $this->getRunPhp())+strlen($this->getRunPhp());
-            }
-            $s = substr($uri, $start, strlen($uri));
-            if (false!==strpos($s, '?')) {
-                $s = substr($s, 0, strpos($s, '?'));
-            }
-            if (!$s) {
-                $s='/';
-            }
-            return $s;
+    public function getPathInfo()
+    {
+        $uri = $this['REQUEST_URI'];
+        if (false===strpos($uri, $this['SCRIPT_NAME'])) {
+            $start = strpos($uri, '?')+1;
+        } else {
+            $start = strpos($uri, $this->getRunPhp())+strlen($this->getRunPhp());
         }
+        $s = substr($uri, $start, strlen($uri));
+        if (false!==strpos($s, '?')) {
+            $s = substr($s, 0, strpos($s, '?'));
+        }
+        if (!$s) {
+            $s='/';
+        }
+        return $s;
+    }
 
 
     public function actionToUrl($action, $url=null)
@@ -90,18 +90,18 @@ class url extends \PMVC\PlugIn
         return $this->toHttp($url);
     }
 
-        /**
+   /**
     * get http or https
     */
-        public function getProtocol()
-        {
-            if (!is_null($this->protocol)) {
-                return $this->protocol;
-            } else {
-                $this->protocol = ('on'!=$this->get('HTTPS')) ? 'http' : 'https';
-                return $this->protocol;
-            }
+    public function getProtocol()
+    {
+        if (!is_null($this->protocol)) {
+            return $this->protocol;
+        } else {
+            $this->protocol = ('on'!=$this['HTTPS']) ? 'http' : 'https';
+            return $this->protocol;
         }
+    }
 
 
     public function tohttp($url, $type=null)
@@ -110,7 +110,7 @@ class url extends \PMVC\PlugIn
             if (is_null($type)) {
                 $type= $this->getProtocol();
             }
-            $url = $type.'://'.$this->get('HTTP_HOST').$url;
+            $url = $type.'://'.$this['HTTP_HOST'].$url;
         }
         return $url;
     }
