@@ -77,9 +77,9 @@ class url extends \PMVC\PlugIn
 
     public function actionToUrl($action, $url=null)
     {
-        $routing = PMVC\getOption(_ROUTING);
+        $routing = \PMVC\getOption(_ROUTING);
         if ($routing) {
-            return PMVC\plug($routing)->actionToUrl($action, $url);
+            return \PMVC\plug($routing)->actionToUrl($action, $url);
         }
     }
 
@@ -159,6 +159,8 @@ class url extends \PMVC\PlugIn
     public function init()
     {
         $this->setEnv(array(
+            'HTTPS',
+            'HTTP_HOST',
             'SCRIPT_NAME',
             'REQUEST_URI'
         ));
