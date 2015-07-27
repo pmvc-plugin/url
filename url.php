@@ -75,7 +75,7 @@ class url extends \PMVC\PlugIn
     }
 
 
-    public function actionToUrl($action, $url=null)
+    public function actionToUrl($action=null, $url=null)
     {
         $routing = \PMVC\getOption(_ROUTING);
         if ($routing) {
