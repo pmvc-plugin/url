@@ -85,8 +85,7 @@ class url extends \PMVC\PlugIn
 
     public function realUrl()
     {
-        $args =& func_get_args();
-        $url = call_user_func_array(array($this,'actionToUrl'), $args);
+        $url = \PMVC\plug('url')['SCRIPT_NAME'];
         return $this->toHttp($url);
     }
 
