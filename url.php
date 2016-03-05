@@ -17,7 +17,7 @@ class url extends \PMVC\PlugIn
      public function setEnv($arr)
      {
          foreach (\PMVC\toArray($arr) as $key) {
-             $this[$key] = getenv($key);
+             $this[$key] = \PMVC\value($_SERVER,[$key]);
          }
      }
     
