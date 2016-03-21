@@ -20,36 +20,26 @@ class url extends \PMVC\PlugIn
              $this[$key] = \PMVC\value($_SERVER,[$key]);
          }
      }
+
+     /**
+      * Set Url
+      */
+     public function seturl($url,$key,$value){
+         $reg = '/([#?&]'.$key.'=)[^&#]*/';
+         preg_match($reg,$url,$match);
+         if(!empty($match)){
+             $url = preg_replace($reg,'${1}'.$value,$url);
+         }else{
+             $url.=(false === strpos($url,'?')) ? '?' : '&'; 
+             $url.=$key.'='.urlencode($value);
+         }   
+         return $url;
+     } 
     
-    /**
-     * $att['url']
-     * $att['action']
-     * $att['del']
-     * $att['separator']
-     */
-    public function getUrl($att=array())
-    {
-        $myUrl = $this->actionToUrl($att['action'], $att['url']);
-        $separator = $this->getSeparator($att['separator']);
-        $urls = \PMVC\get($this); //don't want effect $this->url
-        if (is_array($att['del'])) {
-            foreach ($att['del'] as $k) {
-                unset($urls[$k]);
-            }
-        }
-        if (PMVC\n($urls)) {
-            return $myUrl.$seprator.$this->arrayToUrl($urls, null, $seprator);
-        } else {
-            return $myUrl;
-        }
-    }
-
-
     public function getRunPhp()
     {
         return basename($this['SCRIPT_NAME']);
     }
-
 
     /**
      * Get path information from the environment.
@@ -114,46 +104,6 @@ class url extends \PMVC\PlugIn
         return $url;
     }
 
-    public function arrayToUrl($arr, $parent=null, $seprator=null, $isEncode=true)
-    {
-        if (!is_array($arr)) {
-            return null;
-        }
-        $seprator = $this->getSeparator($seprator);
-        foreach ($arr as $k=>$v) {
-            $newParent = $parent;
-            $newParent[] = $k;
-            if (is_array($v)) {
-                $return.=(($return)?$seprator:'').$this->arrayToUrl($v, $newParent, $seprator, $isEncode);
-                continue;
-            }
-            if (empty($parent)) {
-                $newKey = $this->getEncode($k, $isEncode);
-            } else {
-                $newKey = $this->getEncode($newParent[0], $isEncode);
-                unset($newParent[0]);
-                foreach ($newParent as $v1) {
-                    $newKey .='['.$this->getEncode($v1, $isEncode).']';
-                }
-            }
-            $return.=(($return)?$seprator:'').$newKey.'='.$this->getEncode($v, $isEncode);
-        }
-        return $return;
-    }
-
-    public function getEncode($string, $isEncode)
-    {
-        if ($isEncode) {
-            return urlencode($string);
-        } else {
-            return $string;
-        }
-    }
-
-    public function getSeparator($seprator=null)
-    {
-        return (is_null($seprator))?_URL_SPLIT:$seprator;
-    }
 
     public function init()
     {
