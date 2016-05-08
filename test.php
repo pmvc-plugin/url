@@ -35,7 +35,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
             'port'=>9090,
             'user'=>'username',
             'pass'=>'password',
-            'path'=>['path'],
+            'path'=>['','path'],
             'query'=>new \PMVC\HashMap(['arg'=>'value','zzz'=>'yyy']),
             'fragment'=>'anchor'
         ],\PMVC\get($o));
@@ -43,29 +43,46 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,(string)$o);
     }
 
-    function testSetQuery()
+    function testAddQuery()
     {
         $p = PMVC\plug($this->_plug);
         $o = $p->getUrl(['query'=>'abc=def']);
         $o->query['query2']='def';
-        $expected = 'abc=def&query2=def';
+        $expected = '?abc=def&query2=def';
+        $this->assertEquals($expected,(string)$o);
+    }
+
+    function testSetQuery()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('?xxx=yyy');
+        $o->set('?aaa=bbb');
+        $expected = '?aaa=bbb&xxx=yyy';
+        $this->assertEquals($expected,(string)$o);
+    }
+
+    function testEmptyPath()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl(['host'=>'localhost','query'=>'aaa=bbb']);
+        $expected = 'localhost/?aaa=bbb';
         $this->assertEquals($expected,(string)$o);
     }
 
     function testAppendPath()
     {
         $p = PMVC\plug($this->_plug);
-        $o = $p->getUrl('path');
-        $o->set('path2');
-        $expected = '/path/path2';
+        $o = $p->getUrl('path/');
+        $o->set('path2/');
+        $expected = 'path/path2';
         $this->assertEquals($expected,(string)$o);
     }
 
     function testPrependPath()
     {
         $p = PMVC\plug($this->_plug);
-        $o = $p->getUrl('path');
-        $o->set('http://php.net/1');
+        $o = $p->getUrl('/path/');
+        $o->set('http://php.net/1/');
         $expected = 'http://php.net/1/path';
         $this->assertEquals($expected,(string)$o);
     }
@@ -75,7 +92,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $p = PMVC\plug($this->_plug);
         $o = $p->getUrl('path');
         $o->path='path2';
-        $expected = '/path2';
+        $expected = 'path2';
         $this->assertEquals($expected,(string)$o);
     }
 }

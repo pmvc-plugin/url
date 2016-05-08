@@ -54,6 +54,7 @@ class UrlObject extends \PMVC\HashMap
             unset($url[PATH]);
         }
         \PMVC\set($this,$url);
+        return $this;
     }
 
     function queryToArray($query)
@@ -70,8 +71,8 @@ class UrlObject extends \PMVC\HashMap
             return $path;
         }
         $path = explode('/',$path);
-        if (empty($path[0])) {
-            array_shift($path);
+        if (empty(end($path))) {
+            array_pop($path);
         }
         return $path;
     }
@@ -85,6 +86,9 @@ class UrlObject extends \PMVC\HashMap
     function prependPath($path)
     {
         $path = $this->pathToArray($path);
+        if (empty($this[PATH][0])) {
+            array_shift($this[PATH]);
+        }
         $this[PATH] = array_merge($path,$this[PATH]);
     }
 
@@ -96,11 +100,16 @@ class UrlObject extends \PMVC\HashMap
         $user     = $this[USER]; 
         $pass     = !empty($this[PASS]) ? ':' . $this[PASS]  : ''; 
         $pass     = ($user || $pass) ? $pass.'@' : ''; 
-        $path     = count($this[PATH]) ? '/'. implode( '/', $this[PATH]) : '';
         $query    = \PMVC\get($this[QUERY]);
         ksort($query);
         $query    = http_build_query($query);
-        $query    = (($query && $path) ? '?': '') . $query; 
+        $query    = (($query) ? '?': '') . $query; 
+        $path     = implode( '/', $this[PATH]);
+        $path     = (( 
+            $host && 
+            0!==strpos($path,'/') &&  
+            ($path || $query)
+        ) ? '/' : '').$path;
         $fragment = !empty($this[FRAGMENT])?'#'. $this[FRAGMENT] : ''; 
         return $scheme.$user.$pass.$host.$port.$path.$query.$fragment; 
     }
