@@ -2,6 +2,7 @@
 namespace PMVC\PlugIn\url;
 
 ${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\url';
+\PMVC\l(__DIR__.'/src/UrlObject.php');
 
 class url extends \PMVC\PlugIn
 {
@@ -20,6 +21,15 @@ class url extends \PMVC\PlugIn
              $this[$key] = \PMVC\value($_SERVER,[$key]);
          }
      }
+    
+     /**
+      * Get Url
+      */
+      function getUrl($url)
+      {
+          return new UrlObject($url);
+      }
+
 
      /**
       * Set Url
@@ -62,15 +72,6 @@ class url extends \PMVC\PlugIn
             $s='/';
         }
         return $s;
-    }
-
-
-    public function actionToUrl($action=null, $url=null)
-    {
-        $routing = \PMVC\getOption(_ROUTING);
-        if ($routing) {
-            return \PMVC\plug($routing)->actionToUrl($action, $url);
-        }
     }
 
     public function realUrl()
