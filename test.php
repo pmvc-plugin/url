@@ -36,10 +36,46 @@ class UrlTest extends PHPUnit_Framework_TestCase
             'user'=>'username',
             'pass'=>'password',
             'path'=>['path'],
-            'query'=>['arg'=>'value','zzz'=>'yyy'],
+            'query'=>new \PMVC\HashMap(['arg'=>'value','zzz'=>'yyy']),
             'fragment'=>'anchor'
         ],\PMVC\get($o));
         $expected = 'http://username:password@hostname:9090/path?arg=value&zzz=yyy#anchor';
+        $this->assertEquals($expected,(string)$o);
+    }
+
+    function testSetQuery()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl(['query'=>'abc=def']);
+        $o->query['query2']='def';
+        $expected = 'abc=def&query2=def';
+        $this->assertEquals($expected,(string)$o);
+    }
+
+    function testAppendPath()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('path');
+        $o->set('path2');
+        $expected = '/path/path2';
+        $this->assertEquals($expected,(string)$o);
+    }
+
+    function testPrependPath()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('path');
+        $o->set('http://php.net/1');
+        $expected = 'http://php.net/1/path';
+        $this->assertEquals($expected,(string)$o);
+    }
+
+    function testReplacePath()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('path');
+        $o->path='path2';
+        $expected = '/path2';
         $this->assertEquals($expected,(string)$o);
     }
 }

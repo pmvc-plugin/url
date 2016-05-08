@@ -17,10 +17,8 @@ class UrlObject extends \PMVC\HashMap
 {
     function __construct($url=null)
     {
-        if (!empty($url) && is_string($url)) {
-            $url = $this->parse($url);
-        }
-        parent::__construct($url);
+        parent::__construct(null);
+        $this->set($url);
     }
 
     /**
@@ -31,44 +29,115 @@ class UrlObject extends \PMVC\HashMap
     protected function getInitialState()
     {
         return [
-             SCHEME   =>null,
-             HOST     =>null,
-             PORT     =>null,
-             USER     =>null,
-             PASS     =>null,
-             PATH     =>null,
-             QUERY    =>null,
-             FRAGMENT =>null
+             SCHEME   =>'',
+             HOST     =>'',
+             PORT     =>'',
+             USER     =>'',
+             PASS     =>'',
+             PATH     =>[],
+             QUERY    =>new \PMVC\HashMap(),
+             FRAGMENT =>''
         ];
     }
 
-    function parse($url)
+    function set($url)
     {
-        $arr = parse_url($url);
-        $arr[PATH] = explode('/',$arr[PATH]);
-        array_shift($arr[PATH]);
-        parse_str($arr[QUERY],$arr[QUERY]);
-        return $arr;
+        if (!empty($url) && is_string($url)) {
+            $url = parse_url($url);
+        }
+        if (!empty($url[PATH])) {
+            if(!empty($url[HOST])){
+                $this->prependPath($url[PATH]);
+            }else{
+                $this->appendPath($url[PATH]);
+            }
+            unset($url[PATH]);
+        }
+        \PMVC\set($this,$url);
+    }
+
+    function queryToArray($query)
+    {
+        if (!is_array($query)) {
+            parse_str($query,$query);
+        }
+        return $query;
+    }
+
+    function pathToArray($path)
+    {
+        if (is_array($path)) {
+            return $path;
+        }
+        $path = explode('/',$path);
+        if (empty($path[0])) {
+            array_shift($path);
+        }
+        return $path;
+    }
+
+    function appendPath($path)
+    {
+        $path = $this->pathToArray($path);
+        $this[PATH] = array_merge($this[PATH],$path);
+    }
+
+    function prependPath($path)
+    {
+        $path = $this->pathToArray($path);
+        $this[PATH] = array_merge($path,$this[PATH]);
     }
 
     function stringify()
     {
-        $scheme   = isset($this[SCHEME]) ? $this[SCHEME].'://' : ''; 
+        $scheme   = !empty($this[SCHEME]) ? $this[SCHEME].'://' : ''; 
         $host     = $this[HOST]; 
-        $port     = isset($this[PORT]) ? ':' . $this[PORT] : ''; 
+        $port     = !empty($this[PORT]) ? ':' . $this[PORT] : ''; 
         $user     = $this[USER]; 
-        $pass     = isset($this[PASS]) ? ':' . $this[PASS]  : ''; 
+        $pass     = !empty($this[PASS]) ? ':' . $this[PASS]  : ''; 
         $pass     = ($user || $pass) ? $pass.'@' : ''; 
-        $path     = count($this[PATH]) ? '/'.implode('/',$this[PATH]) : '';
-        ksort($this[QUERY]);
-        $query    = http_build_query($this[QUERY]);
-        $query    = $query ? '?' . $query : ''; 
-        $fragment = isset($this[FRAGMENT])?'#'. $this[FRAGMENT] : ''; 
+        $path     = count($this[PATH]) ? '/'. implode( '/', $this[PATH]) : '';
+        $query    = \PMVC\get($this[QUERY]);
+        ksort($query);
+        $query    = http_build_query($query);
+        $query    = (($query && $path) ? '?': '') . $query; 
+        $fragment = !empty($this[FRAGMENT])?'#'. $this[FRAGMENT] : ''; 
         return $scheme.$user.$pass.$host.$port.$path.$query.$fragment; 
     }
 
-    function __tostring()
+    public function path($path)
+    {
+        $path = $this->pathToArray($path);
+        return parent::offsetSet(PATH, $path);
+    }
+
+    public function query($query)
+    {
+        $query = $this->queryToArray($query);
+        return \PMVC\set($this[QUERY],$query);
+    }
+
+    public function __tostring()
     {
         return $this->stringify();
+    }
+
+    public function __get($k)
+    {
+        return $this[$k];
+    }
+
+    public function offsetSet($k, $v)
+    {
+        if (is_callable([$this,$k])) {
+            return $this->$k($v);
+        }
+        if (!isset($this[$k])) {
+            return !trigger_error(
+                'Key not exists. ['.$k.']',
+                E_USER_WARNING
+            );
+        }
+        return \PMVC\set($this->state, $k, $v);
     }
 }
