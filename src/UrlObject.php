@@ -42,7 +42,7 @@ class UrlObject extends \PMVC\HashMap
 
     function set($url)
     {
-        if (!empty($url) && is_string($url)) {
+        if (!empty($url) && !is_array($url)) {
             $url = parse_url($url);
         }
         if (!empty($url[PATH])) {
