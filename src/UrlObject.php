@@ -143,7 +143,7 @@ class UrlObject extends \PMVC\HashMap
         }
         if (!isset($this[$k])) {
             return !trigger_error(
-                'Key not exists. ['.$k.']',
+                '[PMVC\PlugIn\url\UrlObject] Key not exists. ('.$k.')',
                 E_USER_WARNING
             );
         }
