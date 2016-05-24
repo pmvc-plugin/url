@@ -96,13 +96,15 @@ class url extends \PMVC\PlugIn
 
     public function tohttp($url, $type=null)
     {
-        if (!preg_match('/^http/i', $url)) {
+        if (!preg_match('/^(\/\/|http)/i', $url)) {
             if (is_null($type)) {
                 $type= $this->getProtocol();
             }
-            $url = $type.'://'.$this['HTTP_HOST'].$url;
+            $url = $this->getUrl($url);
+            $url->scheme = $type;
+            $url->host = $this['HTTP_HOST'];
         }
-        return $url;
+        return (string)$url;
     }
 
 
