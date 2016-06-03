@@ -61,6 +61,22 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,(string)$o);
     }
 
+    function testSetPointQuery()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('?xxx.yyy=zzz&aaa_bbb=ccc');
+        $this->assertEquals('zzz',$o->query['xxx.yyy']);
+        $this->assertEquals('ccc',$o->query['aaa_bbb']);
+    }
+
+    function testSetSpaceQuery()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('localhost/path?xxx%20yyy=zzz&aaa bbb=ccc');
+        $this->assertEquals('zzz',$o->query['xxx_yyy']);
+        $this->assertEquals('ccc',$o->query['aaa_bbb']);
+    }
+
     function testEmptyPath()
     {
         $p = PMVC\plug($this->_plug);

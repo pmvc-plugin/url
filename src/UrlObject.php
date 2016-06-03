@@ -60,9 +60,24 @@ class UrlObject extends \PMVC\HashMap
     function queryToArray($query)
     {
         if (!is_array($query)) {
-            parse_str($query,$query);
+            parse_str($query,$arr);
+            $new_arr = [];
+            foreach($arr as $k=>$v){
+                if ( false !== strpos($k,'_') &&
+                    false === strpos($query,$k)
+                ) {
+                    $new_k = str_replace('_','.',$k);
+                    if (false!==strpos($query,$new_k)) {
+                        $new_arr[$new_k] = $v;
+                        unset($arr[$k]);
+                    }
+                }
+            }
+            $arr = array_merge($arr,$new_arr);
+            return $arr;
+        } else {
+            return $query;
         }
-        return $query;
     }
 
     function pathToArray($path)
