@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "pmvc/pmvc": "*"
+        "pmvc/pmvc": "*",
+        "pmvc-plugin/underscore": "*"
     },
     "minimum-stability": "dev"
 }

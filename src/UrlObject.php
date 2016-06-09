@@ -60,20 +60,9 @@ class UrlObject extends \PMVC\HashMap
     function queryToArray($query)
     {
         if (!is_array($query)) {
-            parse_str($query,$arr);
-            $new_arr = [];
-            foreach($arr as $k=>$v){
-                if ( false !== strpos($k,'_') &&
-                    false === strpos($query,$k)
-                ) {
-                    $new_k = str_replace('_','.',$k);
-                    if (false!==strpos($query,$new_k)) {
-                        $new_arr[$new_k] = $v;
-                        unset($arr[$k]);
-                    }
-                }
-            }
-            $arr = array_merge($arr,$new_arr);
+            $arr = \PMVC\plug('underscore')
+                ->query()
+                ->parse_str($query);
             return $arr;
         } else {
             return $query;
