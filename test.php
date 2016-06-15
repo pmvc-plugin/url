@@ -90,7 +90,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $p = PMVC\plug($this->_plug);
         $o = $p->getUrl('path/');
         $o->set('path2/');
-        $expected = 'path/path2';
+        $expected = 'path/path2/';
         $this->assertEquals($expected,(string)$o);
     }
 
@@ -99,7 +99,15 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $p = PMVC\plug($this->_plug);
         $o = $p->getUrl('/path/');
         $o->set('http://php.net/1/');
-        $expected = 'http://php.net/1/path';
+        $expected = 'http://php.net/1/path/';
+        $this->assertEquals($expected,(string)$o);
+    }
+
+    function testSetPathWithLastSlash()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('/path/');
+        $expected = '/path/';
         $this->assertEquals($expected,(string)$o);
     }
 

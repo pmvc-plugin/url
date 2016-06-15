@@ -75,15 +75,15 @@ class UrlObject extends \PMVC\HashMap
             return $path;
         }
         $path = explode('/',$path);
-        if (empty(end($path))) {
-            array_pop($path);
-        }
         return $path;
     }
 
     function appendPath($path)
     {
         $path = $this->pathToArray($path);
+        if (empty(end($this[PATH]))) {
+            array_pop($this[PATH]);
+        }
         $this[PATH] = array_merge($this[PATH],$path);
     }
 
@@ -92,6 +92,9 @@ class UrlObject extends \PMVC\HashMap
         $path = $this->pathToArray($path);
         if (empty($this[PATH][0])) {
             array_shift($this[PATH]);
+        }
+        if ( empty(end($path)) && !empty($this[PATH]) ) {
+            array_pop($path);
         }
         $this[PATH] = array_merge($path,$this[PATH]);
     }
