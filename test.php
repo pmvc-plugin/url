@@ -111,6 +111,15 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,(string)$o);
     }
 
+    function testSetEmptyPathWithSlash()
+    {
+        $p = PMVC\plug($this->_plug);
+        $expected = 'http://php.net/1/';
+        $o = $p->getUrl($expected);
+        $o->appendPath('');
+        $this->assertEquals($expected,(string)$o);
+    }
+
     function testReplacePath()
     {
         $p = PMVC\plug($this->_plug);
