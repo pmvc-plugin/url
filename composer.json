@@ -13,7 +13,8 @@
     ],
     "require": {
         "pmvc/pmvc": "*",
-        "pmvc-plugin/underscore": "*"
+        "pmvc-plugin/underscore": "*",
+        "pmvc-plugin/getenv": "*"
     },
     "minimum-stability": "dev"
 }

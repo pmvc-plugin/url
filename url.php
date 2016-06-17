@@ -4,6 +4,8 @@ namespace PMVC\PlugIn\url;
 ${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\url';
 \PMVC\l(__DIR__.'/src/UrlObject.php');
 
+\PMVC\initPlugIn(['getenv'=>null]);
+
 class url extends \PMVC\PlugIn
 {
     /**
@@ -15,10 +17,11 @@ class url extends \PMVC\PlugIn
     /**
      * Set env
      */
-     public function setEnv($arr)
+     public function setEnv(array $arr)
      {
-         foreach (\PMVC\toArray($arr) as $key) {
-             $this[$key] = \PMVC\value($_SERVER,[$key]);
+         $env = \PMVC\plug('getenv');
+         foreach ($arr as $key) {
+             $this[$key] = $env->get($key);
          }
      }
     
