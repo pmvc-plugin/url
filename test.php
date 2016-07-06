@@ -6,6 +6,12 @@ PMVC\addPlugInFolders(['../']);
 class UrlTest extends PHPUnit_Framework_TestCase
 {
     private $_plug = 'url';
+
+    function setup()
+    {
+        PMVC\unplug($this->_plug);
+    }
+
     function testPlugin()
     {
         ob_start();
@@ -14,15 +20,32 @@ class UrlTest extends PHPUnit_Framework_TestCase
         ob_end_clean();
         $this->assertContains($this->_plug,$output);
     }
+
     function testSetEnv()
     {
         $url = PMVC\plug($this->_plug);
         $expected = 'testing';
         $key = 'APP_ENV';
         $_SERVER[$key] = $expected;
-        $url->setEnv(array($key));
+        $url->setEnv([$key]);
         $this->assertEquals($expected,$url[$key]);
     }
+
+    function testSetEnvOverwirte()
+    {
+        $url = PMVC\plug($this->_plug);
+        $expected = 'testing';
+        $default = 'default';
+        $key = 'APP_ENV';
+        $url[$key] = $default;
+        $_SERVER[$key] = $expected;
+        $url->setEnv([$key], false);
+        $this->assertEquals($default,$url[$key], 'should keep default value');
+        unset($url[$key]);
+        $url->setEnv([$key], false);
+        $this->assertEquals($expected,$url[$key], 'should use env value');
+    }
+
 
     function testUrlObject()
     {

@@ -17,11 +17,13 @@ class url extends \PMVC\PlugIn
     /**
      * Set env
      */
-     public function setEnv(array $arr)
+     public function setEnv(array $arr, $overwrite = true)
      {
          $env = \PMVC\plug('getenv');
          foreach ($arr as $key) {
-             $this[$key] = $env->get($key);
+             if ( $overwrite || !isset($this[$key]) ) {
+                $this[$key] = $env->get($key);
+             }
          }
      }
     
@@ -116,7 +118,7 @@ class url extends \PMVC\PlugIn
             'HTTP_HOST',
             'SCRIPT_NAME',
             'REQUEST_URI'
-        ]);
+        ], false);
     }
 
     public function init()
