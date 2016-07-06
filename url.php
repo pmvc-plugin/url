@@ -33,7 +33,6 @@ class url extends \PMVC\PlugIn
           return new UrlObject($url);
       }
 
-
      /**
       * Set Url
       */
@@ -110,14 +109,18 @@ class url extends \PMVC\PlugIn
         return (string)$url;
     }
 
-
-    public function init()
+    public function initEnv()
     {
-        $this->setEnv(array(
+        $this->setEnv([
             'HTTPS',
             'HTTP_HOST',
             'SCRIPT_NAME',
             'REQUEST_URI'
-        ));
+        ]);
+    }
+
+    public function init()
+    {
+        $this->initEnv();
     }
 }
