@@ -1,6 +1,8 @@
 <?php
 namespace PMVC\PlugIn\url;
 
+use InvalidArgumentException;
+
 const SCHEME = 'scheme';
 const HOST = 'host';
 const PORT = 'port';
@@ -149,11 +151,8 @@ class UrlObject extends \PMVC\HashMap
             return $this->$k($v);
         }
         if (!isset($this[$k])) {
-            return !trigger_error(
-                '[PMVC\PlugIn\url\UrlObject] Key not exists. ('.$k.')',
-                E_USER_WARNING
-            );
+            throw new InvalidArgumentException('Invalid key. ['.$k.']');
         }
-        return \PMVC\set($this->state, $k, $v);
+        return parent::offsetSet($k, $v);
     }
 }

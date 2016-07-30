@@ -151,4 +151,14 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $expected = 'path2';
         $this->assertEquals($expected,(string)$o);
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    function testSetInvalidKey()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('path');
+        $o['xxx'] = 'yyy';
+    }
 }
