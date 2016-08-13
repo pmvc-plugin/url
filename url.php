@@ -56,17 +56,18 @@ class url extends \PMVC\PlugIn
     }
 
     /**
-     * Get path information from the environment.
+     * Get path from environment.
      * @access public
      * @return string
      */
-    public function getPathInfo()
+    public function getPath()
     {
         $uri = $this['REQUEST_URI'];
         if (false===strpos($uri, $this['SCRIPT_NAME'])) {
             $start = strpos($uri, '?')+1;
         } else {
-            $start = strpos($uri, $this->getRunPhp())+strlen($this->getRunPhp());
+            $run = $this->getRunPhp();
+            $start = strpos($uri, $run)+ strlen($run);
         }
         $s = substr($uri, $start, strlen($uri));
         if (false!==strpos($s, '?')) {
