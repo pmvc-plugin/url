@@ -55,7 +55,9 @@ class UrlObject extends \PMVC\HashMap
             }
             unset($url[PATH]);
         }
-        \PMVC\set($this,$url);
+        if ($url) {
+            \PMVC\set($this,$url);
+        }
         return $this;
     }
 
