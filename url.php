@@ -67,12 +67,12 @@ class url extends \PMVC\PlugIn
             false===strpos($uri, $this['SCRIPT_NAME']) 
            ) {
             // http://xxx/path use rewrite rule
-            return $uri;
+            $s = $uri;
         } else {
             $run = $this->getRunPhp();
             $start = strpos($uri, $run)+ strlen($run);
+            $s = substr($uri, $start);
         }
-        $s = substr($uri, $start, strlen($uri));
         if (0===strpos($s, '?')) {
             $s = substr($s, 1); 
         }

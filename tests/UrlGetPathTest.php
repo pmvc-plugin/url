@@ -24,6 +24,7 @@ class UrlGetPathTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected,$actual);
     }
+
     function testRewriteRuleWithPT()
     {
         $oUrl = \PMVC\plug($this->_plug);
@@ -56,4 +57,16 @@ class UrlGetPathTest extends PHPUnit_Framework_TestCase
         $actual = $oUrl->getPath();
         $this->assertEquals($expected,$actual);
     }
+
+    function testRewriteRuleStripQuery()
+    {
+        $oUrl = \PMVC\plug($this->_plug);
+        $expected = '/path';
+        $oUrl['SCRIPT_NAME'] = '';
+        $oUrl['REQUEST_URI'] = $expected.'?a=1&b=2'; 
+        $actual = $oUrl->getPath();
+
+        $this->assertEquals($expected,$actual);
+    }
+
 }
