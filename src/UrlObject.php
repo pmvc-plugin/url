@@ -63,7 +63,7 @@ class UrlObject extends \PMVC\HashMap
 
     function queryToArray($query)
     {
-        if (!is_array($query)) {
+        if (!\PMVC\isArray($query)) {
             $arr = \PMVC\plug('underscore')
                 ->query()
                 ->parse_str($query);
