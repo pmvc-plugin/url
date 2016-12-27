@@ -115,7 +115,7 @@ class UrlObject extends \PMVC\HashMap
         ksort($query);
         $query    = http_build_query($query);
         $query    = (($query) ? '?': '') . $query; 
-        $path     = implode( '/', $this[PATH]);
+        $path     = $this->getPath();
         $path     = (( 
             $host && 
             0!==strpos($path,'/') &&  
@@ -123,6 +123,11 @@ class UrlObject extends \PMVC\HashMap
         ) ? '/' : '').$path;
         $fragment = !empty($this[FRAGMENT])?'#'. $this[FRAGMENT] : ''; 
         return $scheme.$user.$pass.$host.$port.$path.$query.$fragment; 
+    }
+
+    public function getPath()
+    {
+        return implode( '/', $this[PATH]);
     }
 
     public function path($path)

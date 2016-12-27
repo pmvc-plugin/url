@@ -48,4 +48,23 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,$url[$key], 'should use env value');
     }
 
+    function testRealurlWithoutScript()
+    {
+        $oUrl = PMVC\plug($this->_plug);
+        $oUrl['REQUEST_URI'] = 'http://xxx/abc'; 
+        $oUrl['SCRIPT_NAME'] = '/index.php';
+        $expected = 'http://xxx';
+        $actural = $oUrl->realUrl();
+        $this->assertEquals($expected,$actural);
+    }
+
+    function testRealurlWithScript()
+    {
+        $oUrl = PMVC\plug($this->_plug);
+        $oUrl['REQUEST_URI'] = 'http://xxx/index.php/abc'; 
+        $oUrl['SCRIPT_NAME'] = '/index.php';
+        $expected = 'http://xxx/index.php';
+        $actural = $oUrl->realUrl();
+        $this->assertEquals($expected,$actural);
+    }
 }

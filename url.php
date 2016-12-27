@@ -12,7 +12,13 @@ class url extends \PMVC\PlugIn
      * Keep value to check now use http or https
      * @var string
      */
-     private $protocol=null;
+     private $_protocol=null;
+
+     /**
+      * Cache getpath.
+      * @var string
+      */
+      private $_path;
 
     /**
      * Set env
@@ -62,6 +68,9 @@ class url extends \PMVC\PlugIn
      */
     public function getPath()
     {
+        if (!empty($this->_path)) {
+            return $this->_path;
+        }
         $uri = $this['REQUEST_URI'];
         $s='/';
         if ( !$this['SCRIPT_NAME'] || 
@@ -70,7 +79,7 @@ class url extends \PMVC\PlugIn
              )
            ) {
             // http://xxx/path use rewrite rule
-            $s = $uri;
+            $s = $this->getUrl($uri)->getPath();
         } elseif (false !== strpos($uri, $this['SCRIPT_NAME'])) {
             // http://xxx/index.php/path
             $run = $this->getRunPhp();
@@ -83,12 +92,16 @@ class url extends \PMVC\PlugIn
         if (false!==strpos($s, '?')) {
             $s = substr($s, 0, strpos($s, '?'));
         }
+        $this->_path = $s;
         return $s;
     }
 
     public function realUrl()
     {
+        $path = $this->getPath();
         $url = $this['REQUEST_URI'];
+        $end = strrpos($url, $path);
+        $url = substr($url, 0, $end);
         return $this->toHttp($url);
     }
 
@@ -97,11 +110,11 @@ class url extends \PMVC\PlugIn
     */
     public function getProtocol()
     {
-        if (!is_null($this->protocol)) {
-            return $this->protocol;
+        if (!is_null($this->_protocol)) {
+            return $this->_protocol;
         } else {
-            $this->protocol = ('on'!=$this['HTTPS']) ? 'http' : 'https';
-            return $this->protocol;
+            $this->_protocol = ('on'!=$this['HTTPS']) ? 'http' : 'https';
+            return $this->_protocol;
         }
     }
 
