@@ -63,12 +63,16 @@ class url extends \PMVC\PlugIn
     public function getPath()
     {
         $uri = $this['REQUEST_URI'];
-        if ( !$this['SCRIPT_NAME'] ||
-            false===strpos($uri, $this['SCRIPT_NAME']) 
+        $s='/';
+        if ( !$this['SCRIPT_NAME'] || 
+             ( false === strpos($this['SCRIPT_NAME'], $uri) && 
+                false === strpos($uri, $this['SCRIPT_NAME'])
+             )
            ) {
             // http://xxx/path use rewrite rule
             $s = $uri;
-        } else {
+        } elseif (false !== strpos($uri, $this['SCRIPT_NAME'])) {
+            // http://xxx/index.php/path
             $run = $this->getRunPhp();
             $start = strpos($uri, $run)+ strlen($run);
             $s = substr($uri, $start);
@@ -78,9 +82,6 @@ class url extends \PMVC\PlugIn
         }
         if (false!==strpos($s, '?')) {
             $s = substr($s, 0, strpos($s, '?'));
-        }
-        if (!$s) {
-            $s='/';
         }
         return $s;
     }

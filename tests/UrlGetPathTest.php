@@ -47,7 +47,18 @@ class UrlGetPathTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,$actual);
     }
 
-    function testPathStripQuery()
+    function testWithoutIndexDotPhp()
+    {
+        $oUrl = \PMVC\plug($this->_plug);
+        $php = 'http://xxx/xxx.php';
+        $expected = '/';
+        $oUrl['SCRIPT_NAME'] = $php;
+        $oUrl['REQUEST_URI'] = 'http://xxx/'; 
+        $actual = $oUrl->getPath();
+        $this->assertEquals($expected,$actual);
+    }
+
+    function testCleanQuery()
     {
         $oUrl = \PMVC\plug($this->_plug);
         $php = '/xxx.php';
