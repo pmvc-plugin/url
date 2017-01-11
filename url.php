@@ -110,12 +110,10 @@ class url extends \PMVC\PlugIn
     */
     public function getProtocol()
     {
-        if (!is_null($this->_protocol)) {
-            return $this->_protocol;
-        } else {
+        if (empty($this->_protocol)) {
             $this->_protocol = ('on'!=$this['HTTPS']) ? 'http' : 'https';
-            return $this->_protocol;
         }
+        return $this->_protocol;
     }
 
 
@@ -137,9 +135,13 @@ class url extends \PMVC\PlugIn
         $this->setEnv([
             'HTTPS',
             'HTTP_HOST',
+            'HTTP_X_FORWARDED_PROTO',
             'SCRIPT_NAME',
             'REQUEST_URI'
         ], false);
+        if ('https' === $this['HTTP_X_FORWARDED_PROTO']) {
+            $this['HTTPS'] = 'on';
+        }
     }
 
     public function init()
