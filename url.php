@@ -72,6 +72,7 @@ class url extends \PMVC\PlugIn
             return $this->_path;
         }
         $uri = $this['REQUEST_URI'];
+        $uri = str_replace('#','%23',$uri);
         $s='/';
         if ( !$this['SCRIPT_NAME'] || 
              ( false === strpos($this['SCRIPT_NAME'], $uri) && 
