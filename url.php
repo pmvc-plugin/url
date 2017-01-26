@@ -41,6 +41,27 @@ class url extends \PMVC\PlugIn
           return new UrlObject($url);
       }
 
+    /**
+     *  Encode URI
+     */
+    
+    public function encodeUri($s)
+    {
+        $s = urlencode($s);
+        $s = str_replace([
+            '%23',
+            '%26',
+            '%5B',
+            '%5D'
+        ], [
+            '＃',
+            '&',
+            '[',
+            ']'
+        ], $s);
+        return $s;
+    }
+
      /**
       * Set Url
       */
@@ -116,7 +137,6 @@ class url extends \PMVC\PlugIn
         }
         return $this->_protocol;
     }
-
 
     public function tohttp($url, $type=null)
     {
