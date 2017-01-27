@@ -93,7 +93,6 @@ class url extends \PMVC\PlugIn
             return $this->_path;
         }
         $uri = $this['REQUEST_URI'];
-        $uri = str_replace('#','%23',$uri);
         $s='/';
         if ( !$this['SCRIPT_NAME'] || 
              ( false === strpos($this['SCRIPT_NAME'], $uri) && 
@@ -146,7 +145,7 @@ class url extends \PMVC\PlugIn
             }
             $url = $this->getUrl($url);
             $url->scheme = $type;
-            $url->host = $this['HTTP_HOST'];
+            $url->host = $this[HOST];
         }
         return (string)$url;
     }
@@ -157,12 +156,20 @@ class url extends \PMVC\PlugIn
             'HTTPS',
             'HTTP_HOST',
             'HTTP_X_FORWARDED_PROTO',
+            'HTTP_X_FORWARDED_HOST',
             'SCRIPT_NAME',
             'REQUEST_URI'
         ], false);
         if ('https' === $this['HTTP_X_FORWARDED_PROTO']) {
             $this['HTTPS'] = 'on';
         }
+        if (!empty($this['HTTP_X_FORWARDED_HOST'])) {
+            //https://httpd.apache.org/docs/current/mod/mod_proxy.html#x-headers
+            $host = explode(',', $this['HTTP_X_FORWARDED_HOST']);
+            $this['HTTP_HOST'] = $host[0];
+        }
+        $this[HOST] = $this->getUrl($this['HTTP_HOST'])[HOST];
+        $this['REQUEST_URI'] = str_replace('#','%23',$this['REQUEST_URI']);
     }
 
     public function init()
