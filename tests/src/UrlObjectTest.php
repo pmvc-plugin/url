@@ -127,4 +127,23 @@ class UrlObjectTest extends PHPUnit_Framework_TestCase
         $o = $p->getUrl('path');
         $o['xxx'] = 'yyy';
     }
+
+    /**
+     * Explain with empty Scheme
+     */
+    function testUrlWithEmptySchemeHost()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('//tw.yahoo.com/xxx');
+        $this->assertTrue(empty($o[SCHEME]));
+        $this->assertEquals('tw.yahoo.com', $o[HOST]);
+        $o1 = $p->getUrl('google.com/xxx');
+        $this->assertTrue(empty($o1[SCHEME]));
+        $this->assertTrue(empty($o1[HOST]));
+        $this->assertEquals('google.com/xxx', $o1->getPath());
+        $o2 = $p->getUrl('/bing.com/xxx');
+        $this->assertTrue(empty($o2[SCHEME]));
+        $this->assertTrue(empty($o2[HOST]));
+        $this->assertEquals('/bing.com/xxx', $o2->getPath());
+    }
 }
