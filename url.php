@@ -94,7 +94,11 @@ class url extends \PMVC\PlugIn
         }
         $uri = $this['REQUEST_URI'];
         $s='/';
-        if ( !$this['SCRIPT_NAME'] || 
+        if (empty($uri)) {
+            $this->_path = $s;
+            return $s;
+        }
+        if ( empty($this['SCRIPT_NAME']) || 
              ( false === strpos($this['SCRIPT_NAME'], $uri) && 
                 false === strpos($uri, $this['SCRIPT_NAME'])
              )
