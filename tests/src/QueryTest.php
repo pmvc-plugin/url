@@ -34,4 +34,18 @@ class QueryTest extends PHPUnit_Framework_TestCase
         ], \PMVC\get($query));
 
     }
+
+    function testParsePointQuery()
+    {
+        $o = Query::parse_str('xxx.yyy=zzz&aaa_bbb=ccc');
+        $this->assertEquals('zzz',$o['xxx.yyy']);
+        $this->assertEquals('ccc',$o['aaa_bbb']);
+    }
+
+    function testSetSpaceQuery()
+    {
+        $o = Query::parse_str('xxx%20yyy=zzz&aaa bbb=ccc');
+        $this->assertEquals('zzz',$o['xxx_yyy']);
+        $this->assertEquals('ccc',$o['aaa_bbb']);
+    }
 }
