@@ -20,14 +20,14 @@ class Query extends HashMap
     public function toArray($query)
     {
         if (!\PMVC\isArray($query)) {
-            $arr = $this->parse_str($query);
+            $arr = self::parse_str($query);
             return $arr;
         } else {
             return $query;
         }
     }
 
-    public function parse_str($string)
+    static public function parse_str($string)
     {
         parse_str($string,$arr);
         $new_arr = [];
