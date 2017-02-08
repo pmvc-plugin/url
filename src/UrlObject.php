@@ -37,7 +37,7 @@ class UrlObject extends \PMVC\HashMap
              USER     =>'',
              PASS     =>'',
              PATH     =>[],
-             QUERY    =>new \PMVC\HashMap(),
+             QUERY    =>new Query(),
              FRAGMENT =>''
         ];
     }
@@ -59,18 +59,6 @@ class UrlObject extends \PMVC\HashMap
             \PMVC\set($this,$url);
         }
         return $this;
-    }
-
-    function queryToArray($query)
-    {
-        if (!\PMVC\isArray($query)) {
-            $arr = \PMVC\plug('underscore')
-                ->query()
-                ->parse_str($query);
-            return $arr;
-        } else {
-            return $query;
-        }
     }
 
     function pathToArray($path)
@@ -111,9 +99,7 @@ class UrlObject extends \PMVC\HashMap
         $user     = $this[USER]; 
         $pass     = !empty($this[PASS]) ? ':' . $this[PASS]  : ''; 
         $pass     = ($user || $pass) ? $pass.'@' : ''; 
-        $query    = \PMVC\get($this[QUERY]);
-        ksort($query);
-        $query    = http_build_query($query);
+        $query    = (string)$this[QUERY];
         $query    = (($query) ? '?': '') . $query; 
         $path     = $this->getPath();
         $path     = (( 
@@ -138,8 +124,7 @@ class UrlObject extends \PMVC\HashMap
 
     public function query($query)
     {
-        $query = $this->queryToArray($query);
-        return \PMVC\set($this[QUERY],$query);
+        return $this[QUERY]->set($query);
     }
 
     public function __tostring()

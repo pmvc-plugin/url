@@ -2,7 +2,9 @@
 namespace PMVC\PlugIn\url;
 
 ${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\url';
+
 \PMVC\l(__DIR__.'/src/UrlObject.php');
+\PMVC\l(__DIR__.'/src/Query.php');
 
 \PMVC\initPlugIn(['getenv'=>null]);
 

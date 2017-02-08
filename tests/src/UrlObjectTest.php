@@ -25,7 +25,7 @@ class UrlObjectTest extends PHPUnit_Framework_TestCase
             'user'=>'username',
             'pass'=>'password',
             'path'=>['','path'],
-            'query'=>new \PMVC\HashMap(['arg'=>'value','zzz'=>'yyy']),
+            'query'=>new Query(['arg'=>'value','zzz'=>'yyy']),
             'fragment'=>'anchor'
         ],\PMVC\get($o));
         $expected = 'http://username:password@hostname:9090/path?arg=value&zzz=yyy#anchor';
