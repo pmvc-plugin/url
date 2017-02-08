@@ -35,18 +35,25 @@ class url extends \PMVC\PlugIn
          }
      }
     
-     /**
-      * Get Url
-      */
-      function getUrl($url)
-      {
-          return new UrlObject($url);
-      }
+    /**
+     * Get Url
+     */
+    public function getUrl($url)
+    {
+        return new UrlObject($url);
+    }
+
+    /**
+     * Get Url
+     */
+    public function getQuery($query)
+    {
+        return new Query($query);
+    }
 
     /**
      *  Encode URI
      */
-    
     public function encodeUri($s)
     {
         $s = urlencode($s);
