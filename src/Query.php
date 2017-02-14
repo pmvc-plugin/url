@@ -45,13 +45,21 @@ class Query extends HashMap
         $arr = array_replace($arr,$new_arr);
         return $arr;
     }
-
+    
+    /**
+     * More options
+     * http://php.net/manual/en/function.call-user-func-array.php
+     */
     public function stringify()
     {
+        $params = func_get_args();
         $array = \PMVC\get($this);
         ksort($array);
-        $string = http_build_query($array); 
-        return $string;
+        array_unshift($params, $array);
+        return call_user_func_array(
+            'http_build_query',
+            $params
+        );
     }
 
     public function __tostring()
