@@ -40,7 +40,11 @@ class url extends \PMVC\PlugIn
      */
     public function getUrl($url)
     {
-        return new UrlObject($url);
+        if (!is_object($url)) {
+            return new UrlObject($url);
+        } else {
+            return $url;
+        }
     }
 
     /**
@@ -152,9 +156,7 @@ class url extends \PMVC\PlugIn
 
     public function tohttp($url, $type=null)
     {
-        if (!is_object($url)) {
-            $url = $this->getUrl($url);
-        }
+        $url = $this->getUrl($url);
         if (empty($url->scheme)) {
             if (is_null($type)) {
                 $type= $this->getProtocol();
