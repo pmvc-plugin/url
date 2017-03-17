@@ -62,6 +62,11 @@ class Query extends HashMap
         );
     }
 
+    public function __get($k)
+    {
+        return $this[$k];
+    }
+
     public function __tostring()
     {
         return $this->stringify();
