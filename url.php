@@ -154,14 +154,14 @@ class url extends \PMVC\PlugIn
         return $this->_protocol;
     }
 
-    public function tohttp($url, $type=null)
+    public function tohttp($url, $scheme=null)
     {
         $url = $this->getUrl($url);
         if (empty($url->scheme)) {
-            if (is_null($type)) {
-                $type= $this->getProtocol();
+            if (is_null($scheme)) {
+                $scheme = $this->getProtocol();
             }
-            $url->scheme = $type;
+            $url->scheme = $scheme;
         }
         if (empty($url->host)) {
             $url->host = $this[HOST];

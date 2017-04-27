@@ -48,12 +48,18 @@ class Query extends HashMap
     
     /**
      * More options
-     * http://php.net/manual/en/function.call-user-func-array.php
+     * http://php.net/manual/en/function.http-build-query.php
      */
     public function stringify()
     {
-        $params = func_get_args();
         $array = \PMVC\get($this);
+        if (empty($array)) {
+            return '';
+        }
+        if (1 === count($array) && empty(reset($array))) {
+            return array_keys($array)[0];
+        }
+        $params = func_get_args();
         ksort($array);
         array_unshift($params, $array);
         return call_user_func_array(
