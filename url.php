@@ -43,6 +43,9 @@ class url extends \PMVC\PlugIn
         if (!is_object($url)) {
             return new UrlObject($url);
         } else {
+            if (!is_a($url, __NAMESPACE__.'\UrlObject')) {
+                trigger_error('It is not url object.'.print_r($url, true));
+            }
             return $url;
         }
     }
