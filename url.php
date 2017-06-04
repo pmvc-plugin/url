@@ -1,6 +1,8 @@
 <?php
 namespace PMVC\PlugIn\url;
 
+use PMVC\Event;
+
 ${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\url';
 
 \PMVC\l(__DIR__.'/src/UrlObject.php');
@@ -190,12 +192,34 @@ class url extends \PMVC\PlugIn
             $host = explode(',', $this['HTTP_X_FORWARDED_HOST']);
             $this['HTTP_HOST'] = $host[0];
         }
-        $this[HOST] = $this->getUrl($this['HTTP_HOST'])[HOST];
+        $this[HOST] = $this->getDefaultHost();
         $this['REQUEST_URI'] = str_replace('#','%23',$this['REQUEST_URI']);
+    }
+
+    public function getDefaultHost()
+    {
+        return $this->getUrl($this['HTTP_HOST'])[HOST];
     }
 
     public function init()
     {
+        \PMVC\callPlugin(
+            'dispatcher',
+            'attachAfter',
+            [ 
+                $this,
+                Event\MAP_REQUEST,
+            ]
+        );
         $this->initEnv();
+    }
+
+    public function onMapRequest($subject)
+    {
+        $subject->detach($this);
+        $host = \PMVC\getOption(HOST);
+        if ($host) {
+            $this[HOST] = $host;
+        }
     }
 }
