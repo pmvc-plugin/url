@@ -221,5 +221,13 @@ class url extends \PMVC\PlugIn
         if ($host) {
             $this[HOST] = $host;
         }
+        if (\PMVC\exists('http', 'plugin')) {
+            //value effect by $this[HOST]
+            \PMVC\option(
+                'set',
+                'realUrl',
+                \PMVC\plug('url')->realUrl()
+            );
+        }
     }
 }

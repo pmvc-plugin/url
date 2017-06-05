@@ -57,7 +57,9 @@ class Query extends HashMap
             return '';
         }
         if (1 === count($array) && empty(reset($array))) {
-            return array_keys($array)[0];
+            foreach ($array as $k=>$v) {
+                return $k;
+            }
         }
         $params = func_get_args();
         ksort($array);
@@ -75,6 +77,6 @@ class Query extends HashMap
 
     public function __tostring()
     {
-        return $this->stringify();
+        return (string)$this->stringify();
     }
 }
