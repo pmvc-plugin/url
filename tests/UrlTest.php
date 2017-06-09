@@ -1,8 +1,8 @@
 <?php
+
 namespace PMVC\PlugIn\url;
 
 use PMVC;
-
 use PHPUnit_Framework_TestCase;
 
 class UrlTest extends PHPUnit_Framework_TestCase
@@ -58,10 +58,20 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,$actural);
     }
 
-    function testRealurlWithScript()
+    function testRealUrlWithScript()
     {
         $oUrl = PMVC\plug($this->_plug);
         $oUrl['REQUEST_URI'] = 'http://xxx/index.php/abc'; 
+        $oUrl['SCRIPT_NAME'] = '/index.php';
+        $expected = 'http://xxx/index.php';
+        $actural = $oUrl->realUrl();
+        $this->assertEquals($expected,$actural);
+    }
+
+    function testRealUrlIndexWithoutSlash()
+    {
+        $oUrl = PMVC\plug($this->_plug);
+        $oUrl['REQUEST_URI'] = 'http://xxx/index.php'; 
         $oUrl['SCRIPT_NAME'] = '/index.php';
         $expected = 'http://xxx/index.php';
         $actural = $oUrl->realUrl();

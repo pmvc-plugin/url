@@ -143,10 +143,22 @@ class url extends \PMVC\PlugIn
     {
         $path = $this->getPath();
         $url = $this['REQUEST_URI'];
-        $end = strrpos($url, $path);
-        $url = substr($url, 0, $end);
+        if ($path) {
+            $end = strrpos($url, $path);
+            $url = substr($url, 0, $end);
+        }
         return $this->toHttp($url);
     }
+
+    public function pathToUrl($path)
+    {
+        $url = $this->getUrl($path);
+        if (empty($url->scheme) && empty($url->host)) {
+            return $this->realUrl().$path;
+        } else {
+            return $this->toHttp($url);
+        }
+    } 
 
    /**
     * get http or https
@@ -159,7 +171,7 @@ class url extends \PMVC\PlugIn
         return $this->_protocol;
     }
 
-    public function tohttp($url, $scheme=null)
+    public function toHttp($url, $scheme=null)
     {
         $url = $this->getUrl($url);
         if (empty($url->scheme)) {
