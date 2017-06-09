@@ -154,7 +154,7 @@ class url extends \PMVC\PlugIn
     {
         $url = $this->getUrl($path);
         if (empty($url->scheme) && empty($url->host)) {
-            return $this->realUrl().$path;
+            return \PMVC\getOption('realUrl').$path;
         } else {
             return $this->toHttp($url);
         }

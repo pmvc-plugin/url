@@ -15,6 +15,7 @@ class PathToUrlTest extends PHPUnit_Framework_TestCase
         $p = \PMVC\plug($this->_plug);
         $p['REQUEST_URI'] = 'http://xxx/index.php'; 
         $p['SCRIPT_NAME'] = '/index.php';
+        \PMVC\option('set','realUrl',$p->realUrl());
         $expected = 'http://xxx/index.php/error';
         $actural = $p->pathToUrl($path);
         $this->assertEquals($expected,$actural);
