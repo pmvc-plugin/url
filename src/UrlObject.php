@@ -76,6 +76,9 @@ class UrlObject extends \PMVC\HashMap
         if (empty(end($this[PATH]))) {
             array_pop($this[PATH]);
         }
+        if (empty($path[0]) && !empty($this[PATH]) && 1 < count($path)) {
+            array_shift($path);
+        }
         $this[PATH] = array_merge($this[PATH],$path);
     }
 

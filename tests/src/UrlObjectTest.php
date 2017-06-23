@@ -83,6 +83,15 @@ class UrlObjectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,(string)$o);
     }
 
+    function testAppendPathWithSlash()
+    {
+        $p = PMVC\plug($this->_plug);
+        $o = $p->getUrl('http://foo/bar');
+        $o->set('/newpath');
+        $expected = 'http://foo/bar/newpath';
+        $this->assertEquals($expected,(string)$o);
+    }
+
     function testPrependPath()
     {
         $p = PMVC\plug($this->_plug);
