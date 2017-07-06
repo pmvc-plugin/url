@@ -80,4 +80,25 @@ class UrlGetPathTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,$actual);
     }
 
+    /**
+     * @dataProvider uriSameWithScriptProvider
+     */
+    function testUriSameWithScript($script, $uri, $expected)
+    {
+        $oUrl = \PMVC\plug($this->_plug);
+        $oUrl['SCRIPT_NAME'] = $script;
+        $oUrl['REQUEST_URI'] = $uri; 
+        $actual = $oUrl->getPath();
+        $this->assertEquals($expected, $actual);
+    }
+
+    function uriSameWithScriptProvider()
+    {
+        return [
+             ['/xxx/index.php', '/xxx/?foo=bar', '/'],
+             ['/index.php', '/?foo=bar', '/'],
+             ['/index.php', '?foo=bar', '/'],
+        ];
+    }
+
 }

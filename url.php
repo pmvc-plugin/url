@@ -116,9 +116,11 @@ class url extends \PMVC\PlugIn
             $this->_path = $s;
             return $s;
         }
+        $scriptFolder = dirname($this['SCRIPT_NAME']).'/?';
         if ( empty($this['SCRIPT_NAME']) || 
              ( false === strpos($this['SCRIPT_NAME'], $uri) && 
-                false === strpos($uri, $this['SCRIPT_NAME'])
+               false === strpos($uri, $this['SCRIPT_NAME']) &&
+               false === strpos($uri, $scriptFolder) // http://xxx/?/path
              )
            ) {
             // http://xxx/path use rewrite rule
@@ -128,6 +130,9 @@ class url extends \PMVC\PlugIn
             $run = $this->getRunPhp();
             $start = strpos($uri, $run)+ strlen($run);
             $s = substr($uri, $start);
+        }
+        if (empty($s)) {
+            $s = '/';
         }
         if (0===strpos($s, '?')) {
             $s = substr($s, 1); 
@@ -143,7 +148,7 @@ class url extends \PMVC\PlugIn
     {
         $path = $this->getPath();
         $url = $this['REQUEST_URI'];
-        if ($path) {
+        if ($path && !('/'===$path && '/'!==substr($url, -1))) {
             $end = strrpos($url, $path);
             $url = substr($url, 0, $end);
         }
