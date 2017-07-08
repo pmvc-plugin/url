@@ -1,4 +1,5 @@
 <?php
+
 namespace PMVC\PlugIn\url;
 
 use InvalidArgumentException;
@@ -45,7 +46,11 @@ class UrlObject extends \PMVC\HashMap
     function set($url)
     {
         if (!empty($url) && !is_array($url)) {
-            $url = parse_url($url);
+            if (false !== strpos($url, '#')) {
+                $url = \PMVC\plug('url')->parse_hashtag_url($url);
+            } else {
+                $url = parse_url($url);
+            }
         }
         if (!empty($url[PATH])) {
             if(!empty($url[HOST])){

@@ -77,4 +77,5 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $actural = $oUrl->realUrl();
         $this->assertEquals($expected,$actural);
     }
+    
 }

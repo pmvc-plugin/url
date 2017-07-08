@@ -155,4 +155,74 @@ class UrlObjectTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(empty($o2[HOST]));
         $this->assertEquals('/bing.com/xxx', $o2->getPath());
     }
+
+    /**
+     * @see https://bugs.php.net/bug.php?id=73192
+     * @dataProvider bug73192Provider
+     */
+    function testBug73192($test, $host, $fragment)
+    {
+        $oUrl = PMVC\plug($this->_plug);
+        $actual = $oUrl->getUrl($test);
+        $this->assertEquals(
+            $host,
+            $actual[HOST],
+            HOST
+        );
+        $this->assertEquals(
+            $fragment,
+            $actual[FRAGMENT],
+            FRAGMENT
+        );
+    }
+
+    function bug73192Provider()
+    {
+        return [
+            [
+                'https://example.com:80#@foo.com/#bar',
+                'example.com',
+                '@foo.com/#bar'
+            ],
+            [
+                '//example.com:80#@foo.com/#bar',
+                'example.com',
+                '@foo.com/#bar'
+            ],
+            [
+                'example.com:80#@foo.com/#bar',
+                'example.com',
+                '@foo.com/#bar'
+            ],
+            [
+                'http://example.com:80#/foo',
+                'example.com',
+                '/foo'
+            ],
+            [
+                'http://example.com:80/#foo',
+                'example.com',
+                'foo'
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider parseFailedProvider
+     */
+    function testParseFailed($test)
+    {
+        $oUrl = PMVC\plug($this->_plug);
+        $actual = $oUrl->getUrl($test);
+        $this->assertEquals('', (string)$actual);
+    }
+
+    function parseFailedProvider()
+    {
+        return [
+            ['http:///example.com'],
+            ['http://:80'],
+            ['http://user@:80'],
+        ];
+    }
 }
