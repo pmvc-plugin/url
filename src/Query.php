@@ -56,10 +56,15 @@ class Query extends HashMap
         if (empty($array)) {
             return '';
         }
-        if (1 === count($array) && empty(reset($array))) {
-            foreach ($array as $k=>$v) {
-                return $k;
+        $value = false;
+        foreach ($array as $v) {
+            if (!empty($v)) {
+                $value = true;
+                break;
             }
+        }
+        if (empty($value)) {
+            return join('&', array_keys($array));
         }
         $params = func_get_args();
         ksort($array);
