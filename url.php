@@ -60,26 +60,6 @@ class url extends \PMVC\PlugIn
         return new Query($query);
     }
 
-    /**
-     *  Encode URI
-     */
-    public function encodeUri($s)
-    {
-        $s = urlencode($s);
-        $s = str_replace([
-            '%23',
-            '%26',
-            '%5B',
-            '%5D'
-        ], [
-            '＃',
-            '&',
-            '[',
-            ']'
-        ], $s);
-        return $s;
-    }
-
      /**
       * Set Url
       */
