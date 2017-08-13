@@ -127,7 +127,8 @@ class url extends \PMVC\PlugIn
     public function realUrl()
     {
         $path = $this->getPath();
-        $url = $this['REQUEST_URI'];
+        // clean querystring
+        $url = explode('?', $this['REQUEST_URI'])[0];
         if ($path && !('/'===$path && '/'!==substr($url, -1))) {
             $end = strrpos($url, $path);
             $url = substr($url, 0, $end);
