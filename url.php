@@ -196,7 +196,7 @@ class url extends \PMVC\PlugIn
 
     public function getDefaultHost()
     {
-        return $this->getUrl($this['HTTP_HOST'])[HOST];
+        return $this->getUrl('//'.$this['HTTP_HOST'])[HOST];
     }
 
     public function init()
@@ -220,7 +220,7 @@ class url extends \PMVC\PlugIn
             $this[HOST] = $host;
         }
         if (\PMVC\exists('http', 'plugin')) {
-            //value effect by $this[HOST]
+            //value was effected by $this[HOST]
             \PMVC\plug('controller')['realUrl'] = \PMVC\plug('url')->realUrl();
         }
     }

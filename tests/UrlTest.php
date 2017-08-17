@@ -77,5 +77,44 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $actural = $oUrl->realUrl();
         $this->assertEquals($expected,$actural);
     }
-    
+
+    /**
+     * @dataProvider realUrlWithOnlyHostnameProvider
+     */
+    function testRealUrlWithOnlyHostname($requestUri)
+    {
+        $oUrl = PMVC\plug($this->_plug);
+        $oUrl['REQUEST_URI'] = $requestUri; 
+        $oUrl['SCRIPT_NAME'] = '/index.php';
+        $oUrl['HTTP_HOST'] = 'xxx';
+        $oUrl[HOST] = $oUrl->getDefaultHost();
+        $expected = 'http://xxx';
+        $actural = $oUrl->realUrl();
+        $this->assertEquals($expected,$actural);
+    }
+
+    function realUrlWithOnlyHostnameProvider()
+    {
+        return [
+            [
+               'http://xxx' 
+            ],
+            [
+               'http://xxx/'
+            ],
+            [
+                'http://xxx?abc=1'
+            ],
+            [
+                'http://xxx/?abc=2'
+            ],
+            [
+                '/'
+            ],
+            [
+                '/?abc=3'
+            ]
+        ];
+    }
+
 }
