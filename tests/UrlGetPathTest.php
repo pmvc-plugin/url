@@ -98,6 +98,7 @@ class UrlGetPathTest extends PHPUnit_Framework_TestCase
              ['/xxx/index.php', '/xxx/?foo=bar', '/'],
              ['/index.php', '/?foo=bar', '/'],
              ['/index.php', '?foo=bar', '/'],
+             ['/fake/index.php', '/fake/index.php/hello', '/hello']
         ];
     }
 
