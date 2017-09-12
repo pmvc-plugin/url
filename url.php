@@ -215,6 +215,7 @@ class url extends \PMVC\PlugIn
     public function onMapRequest($subject)
     {
         $subject->detach($this);
+        $this->initEnv(); //for override
         $host = \PMVC\getOption(HOST);
         if ($host) {
             $this[HOST] = $host;
