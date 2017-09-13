@@ -32,7 +32,10 @@ class url extends \PMVC\PlugIn
          $env = \PMVC\plug('getenv');
          foreach ($arr as $key) {
              if ( $overwrite || !isset($this[$key]) ) {
-                $this[$key] = $env->get($key);
+                $val = $env->get($key);
+                if ($val) {
+                    $this[$key] = $val;
+                }
              }
          }
      }
@@ -215,7 +218,6 @@ class url extends \PMVC\PlugIn
     public function onMapRequest($subject)
     {
         $subject->detach($this);
-        $this->initEnv(); //for override
         $host = \PMVC\getOption(HOST);
         if ($host) {
             $this[HOST] = $host;

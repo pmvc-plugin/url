@@ -1,8 +1,8 @@
 <?php
+
 namespace PMVC\PlugIn\url;
 
 use PMVC;
-
 use PHPUnit_Framework_TestCase;
 
 class UrlGetPathTest extends PHPUnit_Framework_TestCase

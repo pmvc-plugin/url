@@ -101,7 +101,13 @@ class UrlObject extends \PMVC\HashMap
 
     function stringify()
     {
-        $scheme   = !empty($this[SCHEME]) ? $this[SCHEME].'://' : ''; 
+        if (!empty($this[SCHEME])) {
+            $scheme = $this[SCHEME].'://';
+        } elseif (false===$this[SCHEME]) {
+            $scheme = '//';
+        } else {
+            $scheme = '';
+        }
         $host     = $this[HOST]; 
         $port     = !empty($this[PORT]) ? ':' . $this[PORT] : ''; 
         $user     = $this[USER]; 
