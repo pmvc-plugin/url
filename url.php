@@ -155,7 +155,7 @@ class url extends \PMVC\PlugIn
     public function getProtocol()
     {
         if (empty($this->_protocol)) {
-            $this->_protocol = ('on'!=$this['HTTPS']) ? 'http' : 'https';
+            $this->_protocol = ('on' !== $this['HTTPS']) ? 'http' : 'https';
         }
         return $this->_protocol;
     }
