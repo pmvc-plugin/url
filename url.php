@@ -14,31 +14,33 @@ class url extends \PMVC\PlugIn
 {
     /**
      * Keep value to check now use http or https
+     *
      * @var string
      */
-     private $_protocol=null;
+    private $_protocol=null;
 
      /**
       * Cache getpath.
+      *
       * @var string
       */
-      private $_path;
+    private $_path;
 
     /**
      * Set env
      */
-     public function setEnv(array $arr, $overwrite = true)
-     {
-         $env = \PMVC\plug('getenv');
-         foreach ($arr as $key) {
-             if ( $overwrite || !isset($this[$key]) ) {
+    public function setEnv(array $arr, $overwrite = true)
+    {
+        $env = \PMVC\plug('getenv');
+        foreach ($arr as $key) {
+            if ($overwrite || !isset($this[$key]) ) {
                 $val = $env->get($key);
                 if ($val) {
                     $this[$key] = $val;
                 }
-             }
-         }
-     }
+            }
+        }
+    }
     
     /**
      * Get Url
@@ -66,17 +68,18 @@ class url extends \PMVC\PlugIn
      /**
       * Set Url
       */
-     public function seturl($url,$key,$value){
-         $reg = '/([#?&]'.$key.'=)[^&#]*/';
-         preg_match($reg,$url,$match);
-         if(!empty($match)){
-             $url = preg_replace($reg,'${1}'.$value,$url);
-         }else{
-             $url.=(false === strpos($url,'?')) ? '?' : '&'; 
-             $url.=$key.'='.urlencode($value);
-         }   
-         return $url;
-     } 
+    public function seturl($url,$key,$value)
+    {
+        $reg = '/([#?&]'.$key.'=)[^&#]*/';
+        preg_match($reg, $url, $match);
+        if(!empty($match)) {
+            $url = preg_replace($reg, '${1}'.$value, $url);
+        }else{
+            $url.=(false === strpos($url, '?')) ? '?' : '&'; 
+            $url.=$key.'='.urlencode($value);
+        }   
+        return $url;
+    } 
     
     public function getRunPhp()
     {
@@ -85,6 +88,7 @@ class url extends \PMVC\PlugIn
 
     /**
      * Get path from environment.
+     *
      * @access public
      * @return string
      */
@@ -100,12 +104,12 @@ class url extends \PMVC\PlugIn
             return $s;
         }
         $scriptFolder = dirname($this['SCRIPT_NAME']).'/?';
-        if ( empty($this['SCRIPT_NAME']) || 
-             ( false === strpos($this['SCRIPT_NAME'], $uri) && 
-               false === strpos($uri, $this['SCRIPT_NAME']) &&
-               false === strpos($uri, $scriptFolder) // http://xxx/?/path
-             )
-           ) {
+        if (empty($this['SCRIPT_NAME'])  
+            || ( false === strpos($this['SCRIPT_NAME'], $uri)  
+            && false === strpos($uri, $this['SCRIPT_NAME']) 
+            && false === strpos($uri, $scriptFolder) // http://xxx/?/path
+            )
+        ) {
             // http://xxx/path use rewrite rule
             $s = $this->getUrl($uri)->getPath();
         } elseif (false !== strpos($uri, $this['SCRIPT_NAME'])) {
@@ -149,9 +153,9 @@ class url extends \PMVC\PlugIn
         }
     } 
 
-   /**
-    * get http or https
-    */
+    /**
+     * get http or https
+     */
     public function getProtocol()
     {
         if (empty($this->_protocol)) {
@@ -160,6 +164,16 @@ class url extends \PMVC\PlugIn
         return $this->_protocol;
     }
 
+    /**
+     * Prefix http to a url
+     *
+     * @param string $url    Url.
+     * @param mixed  $scheme [http|https|null|false]
+     *                       null:  auto select https:// or http://
+     *                       false: use '//'
+     *
+     * @return string
+     */
     public function toHttp($url, $scheme=null)
     {
         $url = $this->getUrl($url);
@@ -177,14 +191,16 @@ class url extends \PMVC\PlugIn
 
     public function initEnv()
     {
-        $this->setEnv([
+        $this->setEnv(
+            [
             'HTTPS',
             'HTTP_HOST',
             'HTTP_X_FORWARDED_PROTO',
             'HTTP_X_FORWARDED_HOST',
             'SCRIPT_NAME',
             'REQUEST_URI'
-        ], false);
+            ], false
+        );
         if ('https' === $this['HTTP_X_FORWARDED_PROTO']) {
             $this['HTTPS'] = 'on';
         }
@@ -194,7 +210,7 @@ class url extends \PMVC\PlugIn
             $this['HTTP_HOST'] = $host[0];
         }
         $this[HOST] = $this->getDefaultHost();
-        $this['REQUEST_URI'] = str_replace('#','%23',$this['REQUEST_URI']);
+        $this['REQUEST_URI'] = str_replace('#', '%23', $this['REQUEST_URI']);
     }
 
     public function getDefaultHost()
