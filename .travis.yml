@@ -9,7 +9,7 @@ php:
   - hhvm
  
 before_script:
-  - composer self-update
+  - composer self-update 1.8.4
   - composer install --prefer-source
   - composer require phpunit/phpunit 4.8.35
  
