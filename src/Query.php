@@ -17,8 +17,11 @@ class Query extends HashMap
         return \PMVC\set($this, $array);
     }
 
-    public function toArray($query)
+    public function toArray($query = null)
     {
+        if (is_null($query)) {
+          return $this->offsetGet($query);
+        }
         if (!\PMVC\isArray($query)) {
             $arr = self::parse_str($query);
             return $arr;
