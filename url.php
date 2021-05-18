@@ -189,6 +189,7 @@ class url extends \PMVC\PlugIn
             $url->scheme = $scheme;
         }
         if (empty($url->host)) {
+            // HTTP_HOST -> host:port
             $url->host = $this['HTTP_HOST'];
         }
         return (string)$url;
