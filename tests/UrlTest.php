@@ -3,13 +3,13 @@
 namespace PMVC\PlugIn\url;
 
 use PMVC;
-use PHPUnit_Framework_TestCase;
+use PMVC\TestCase;
 
-class UrlTest extends PHPUnit_Framework_TestCase
+class UrlTest extends TestCase
 {
     private $_plug = 'url';
 
-    function setup()
+    function pmvc_setup()
     {
         PMVC\unplug($this->_plug);
     }
@@ -20,7 +20,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
         print_r(PMVC\plug($this->_plug));
         $output = ob_get_contents();
         ob_end_clean();
-        $this->assertContains($this->_plug,$output);
+        $this->haveString($this->_plug,$output);
     }
 
     function testSetEnv()

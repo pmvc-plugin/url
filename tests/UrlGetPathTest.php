@@ -3,13 +3,13 @@
 namespace PMVC\PlugIn\url;
 
 use PMVC;
-use PHPUnit_Framework_TestCase;
+use PMVC\TestCase;
 
-class UrlGetPathTest extends PHPUnit_Framework_TestCase
+class UrlGetPathTest extends TestCase
 {
     private $_plug = 'url';
 
-    function setup()
+    function pmvc_setup()
     {
         PMVC\unplug($this->_plug);
     }

@@ -15,5 +15,8 @@
         "pmvc/pmvc": "*",
         "pmvc-plugin/getenv": "*"
     },
+    "require-dev": {
+        "pmvc-plugin/unit": "*"
+    },
     "minimum-stability": "dev"
 }

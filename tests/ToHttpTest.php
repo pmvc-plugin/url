@@ -3,13 +3,13 @@
 namespace PMVC\PlugIn\url;
 
 use PMVC;
-use PHPUnit_Framework_TestCase;
+use PMVC\TestCase;
 
-class ToHttpTest extends PHPUnit_Framework_TestCase
+class ToHttpTest extends TestCase
 {
     private $_plug = 'url';
 
-    function setup()
+    function pmvc_setup()
     {
         PMVC\unplug($this->_plug);
     }

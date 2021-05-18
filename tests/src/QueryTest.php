@@ -1,14 +1,14 @@
 <?php
 namespace PMVC\PlugIn\url;
 
-use PHPUnit_Framework_TestCase;
 use PMVC;
+use PMVC\TestCase;
 
-class QueryTest extends PHPUnit_Framework_TestCase
+class QueryTest extends TestCase
 {
     private $_plug = 'url';
 
-    function setup()
+    function pmvc_setup()
     {
         PMVC\plug($this->_plug, [\PMVC\PAUSE=>true]);
     }

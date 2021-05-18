@@ -1,14 +1,15 @@
 <?php
 namespace PMVC\PlugIn\url;
 
-use PHPUnit_Framework_TestCase;
 use PMVC;
+use PMVC\TestCase;
+use InvalidArgumentException;
 
-class UrlObjectTest extends PHPUnit_Framework_TestCase
+class UrlObjectTest extends TestCase
 {
     private $_plug = 'url';
 
-    function setup()
+    function pmvc_setup()
     {
         PMVC\unplug($this->_plug);
     }
@@ -18,6 +19,9 @@ class UrlObjectTest extends PHPUnit_Framework_TestCase
         $p = PMVC\plug($this->_plug);
         $url = 'http://username:password@hostname:9090/path?zzz=yyy&arg=value#anchor';
         $o = $p->getUrl($url);
+
+        $actual = \PMVC\get($o);
+
         $this->assertEquals([
             'scheme'=>'http',
             'host'=>'hostname',
@@ -25,9 +29,9 @@ class UrlObjectTest extends PHPUnit_Framework_TestCase
             'user'=>'username',
             'pass'=>'password',
             'path'=>['','path'],
-            'query'=>new Query(['arg'=>'value','zzz'=>'yyy']),
+            'query'=>['arg'=>'value','zzz'=>'yyy'],
             'fragment'=>'anchor'
-        ],\PMVC\get($o));
+        ],$actual);
         $expected = 'http://username:password@hostname:9090/path?arg=value&zzz=yyy#anchor';
         $this->assertEquals($expected,(string)$o);
     }
@@ -134,7 +138,9 @@ class UrlObjectTest extends PHPUnit_Framework_TestCase
     {
         $p = PMVC\plug($this->_plug);
         $o = $p->getUrl('path');
-        $o['xxx'] = 'yyy';
+        $this->willThrow(function() use($o){
+            $o['xxx'] = 'yyy';
+        }, false);
     }
 
     /**

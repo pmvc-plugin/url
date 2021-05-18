@@ -3,9 +3,9 @@
 namespace PMVC\PlugIn\url;
 
 use PMVC;
-use PHPUnit_Framework_TestCase;
+use PMVC\TestCase;
 
-class PathToUrlTest extends PHPUnit_Framework_TestCase
+class PathToUrlTest extends TestCase
 {
     private $_plug = 'url';
 
