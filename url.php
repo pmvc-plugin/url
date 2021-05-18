@@ -131,6 +131,11 @@ class url extends \PMVC\PlugIn
         return $s;
     }
 
+    /**
+     * Real Url without query and path
+     * Ex: http://localhost:8000/index.php/path1/path2?foo=bar
+     * will reutrn http://localhost:8000/index.php
+     */
     public function realUrl()
     {
         $path = $this->getPath();
@@ -184,7 +189,7 @@ class url extends \PMVC\PlugIn
             $url->scheme = $scheme;
         }
         if (empty($url->host)) {
-            $url->host = $this[HOST];
+            $url->host = $this['HTTP_HOST'];
         }
         return (string)$url;
     }

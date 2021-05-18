@@ -9,12 +9,19 @@ class PathToUrlTest extends TestCase
 {
     private $_plug = 'url';
 
+
+    public function pmvc_setup()
+    {
+        PMVC\unplug($this->_plug);
+    }
+
     public function testPathToUrl()
     {
         $path = '/error';
         $p = \PMVC\plug($this->_plug);
-        $p['REQUEST_URI'] = 'http://xxx/index.php'; 
+        $p['REQUEST_URI'] = '/index.php/path1/path2'; 
         $p['SCRIPT_NAME'] = '/index.php';
+        $p['HTTP_HOST'] = 'xxx';
         \PMVC\option('set','realUrl',$p->realUrl());
         $expected = 'http://xxx/index.php/error';
         $actural = $p->pathToUrl($path);
@@ -25,8 +32,9 @@ class PathToUrlTest extends TestCase
     public function testPathToUrlWithPort() {
         $path = '/error';
         $p = \PMVC\plug($this->_plug);
-        $p['REQUEST_URI'] = 'http://xxx:8888/index.php'; 
+        $p['REQUEST_URI'] = '/index.php/path1/path2'; 
         $p['SCRIPT_NAME'] = '/index.php';
+        $p['HTTP_HOST'] = 'xxx:8888';
         \PMVC\option('set','realUrl',$p->realUrl());
         $expected = 'http://xxx:8888/index.php/error';
         $actural = $p->pathToUrl($path);
