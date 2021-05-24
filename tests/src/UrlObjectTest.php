@@ -134,6 +134,19 @@ class UrlObjectTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
+    public function testParsePortFailed()
+    {
+        $oUrl = PMVC\plug($this->_plug);
+        $test = 'http://xxx';
+        $o = $oUrl->getUrl($test);
+        $this->willThrow(function() use($o){
+            $o->port = 'aa';
+        }, false);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
     function testSetInvalidKey()
     {
         $p = PMVC\plug($this->_plug);

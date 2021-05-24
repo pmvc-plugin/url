@@ -164,7 +164,7 @@ class url extends \PMVC\PlugIn
     public function getProtocol()
     {
         if (empty($this->_protocol)) {
-            $this->_protocol = ('on' !== $this['HTTPS']) ? 'http' : 'https';
+            $this->_protocol = ('on' !== $this['HTTPS'] && 443 !== $this[PORT]) ? 'http' : 'https';
         }
         return $this->_protocol;
     }
@@ -189,8 +189,14 @@ class url extends \PMVC\PlugIn
             $url->scheme = $scheme;
         }
         if (empty($url->host)) {
-            // HTTP_HOST -> host:port
-            $url->host = $this['HTTP_HOST'];
+            $url->host = $this[HOST];
+        }
+        if (empty($url->port)) {
+            $is80 = 'http' === $url->scheme && $this[PORT] === 80;
+            $is443 = 'https' === $url->scheme && $this[PORT] === 443;
+            if (!$is80 && !$is443) {
+                $url->port = $this[PORT];
+            }
         }
         return (string)$url;
     }
@@ -215,13 +221,15 @@ class url extends \PMVC\PlugIn
             $host = explode(',', $this['HTTP_X_FORWARDED_HOST']);
             $this['HTTP_HOST'] = $host[0];
         }
-        $this[HOST] = $this->getDefaultHost();
+        $this->_initDefaultHost();
         $this['REQUEST_URI'] = str_replace('#', '%23', $this['REQUEST_URI']);
     }
 
-    public function getDefaultHost()
+    private function _initDefaultHost()
     {
-        return $this->getUrl('//'.$this['HTTP_HOST'])[HOST];
+        $oUrl = $this->getUrl('//'.$this['HTTP_HOST']);
+        $this[HOST] = $oUrl[HOST];
+        $this[PORT] = $oUrl[PORT];
     }
 
     public function init()

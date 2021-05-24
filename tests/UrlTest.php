@@ -83,11 +83,12 @@ class UrlTest extends TestCase
      */
     function testRealUrlWithOnlyHostname($requestUri)
     {
-        $oUrl = PMVC\plug($this->_plug);
-        $oUrl['REQUEST_URI'] = $requestUri; 
-        $oUrl['SCRIPT_NAME'] = '/index.php';
-        $oUrl['HTTP_HOST'] = 'xxx';
-        $oUrl[HOST] = $oUrl->getDefaultHost();
+        $config = [
+            'REQUEST_URI' => $requestUri,
+            'SCRIPT_NAME' => '/index.php',
+            'HTTP_HOST' => 'xxx',
+        ]; 
+        $oUrl = PMVC\plug($this->_plug, $config);
         $expected = 'http://xxx';
         $actural = $oUrl->realUrl();
         $this->assertEquals($expected,$actural);

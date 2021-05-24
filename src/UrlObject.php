@@ -34,7 +34,7 @@ class UrlObject extends \PMVC\HashMap
         return [
              SCHEME   =>'',
              HOST     =>'',
-             PORT     =>'',
+             PORT     =>null,
              USER     =>'',
              PASS     =>'',
              PATH     =>[],
@@ -139,6 +139,17 @@ class UrlObject extends \PMVC\HashMap
     public function query($query)
     {
         return $this[QUERY]->set($query);
+    }
+
+    public function port($num)
+    {
+        if (is_null($num)) {
+            return;
+        }
+        if (!is_numeric($num)) {
+            throw new InvalidArgumentException('Port is not number. ['.$num.']');
+        }
+        return parent::offsetSet(PORT, (int)$num);;
     }
 
     public function __tostring()
