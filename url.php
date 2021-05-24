@@ -192,8 +192,9 @@ class url extends \PMVC\PlugIn
             $url->host = $this[HOST];
         }
         if (empty($url->port)) {
-            $is80 = 'http' === $url->scheme && $this[PORT] === 80;
-            $is443 = 'https' === $url->scheme && $this[PORT] === 443;
+            $isCommonPort = $this[PORT] === 443 || $this[PORT] === 80;
+            $is80 = 'http' === $url->scheme && $isCommonPort;
+            $is443 = 'https' === $url->scheme && $isCommonPort;
             if (!$is80 && !$is443) {
                 $url->port = $this[PORT];
             }

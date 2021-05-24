@@ -80,4 +80,30 @@ class PathToUrlTest extends TestCase
         $actural = $p->pathToUrl($path);
         $this->assertEquals($path,$actural);
     }
+
+    public function testHttpTo443()
+    {
+        $path = 'http://xxx/index.php/error';
+        $config = [
+            'REQUEST_URI' => '/index.php/path1/path2',
+            'SCRIPT_NAME' => '/index.php',
+            'HTTP_HOST' => 'xxx:443',
+        ]; 
+        $p = \PMVC\plug($this->_plug, $config);
+        $actural = $p->pathToUrl($path);
+        $this->assertEquals($path,$actural);
+    }
+
+    public function testHttpsTo80()
+    {
+        $path = 'https://xxx/index.php/error';
+        $config = [
+            'REQUEST_URI' => '/index.php/path1/path2',
+            'SCRIPT_NAME' => '/index.php',
+            'HTTP_HOST' => 'xxx:80',
+        ]; 
+        $p = \PMVC\plug($this->_plug, $config);
+        $actural = $p->pathToUrl($path);
+        $this->assertEquals($path,$actural);
+    }
 }
