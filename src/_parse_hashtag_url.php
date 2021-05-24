@@ -15,9 +15,9 @@ class ParseHashtagUrl
         $dbSlashPos = strpos($url, '//');
         $slashPos = strpos($url, '/', $dbSlashPos+2);
         if ($slashPos > $hashPos) {
-            $url = substr($url,0,$hashPos).
+            $url = substr($url, 0, $hashPos).
                 '/#'.
-                substr($url,$hashPos+1);
+                substr($url, $hashPos+1);
         }
         return parse_url($url);
     }

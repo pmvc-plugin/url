@@ -20,7 +20,7 @@ class Query extends HashMap
     public function toArray($query = null)
     {
         if (is_null($query)) {
-          return $this->offsetGet($query);
+            return $this->offsetGet($query);
         }
         if (!\PMVC\isArray($query)) {
             $arr = self::parse_str($query);
@@ -32,20 +32,20 @@ class Query extends HashMap
 
     static public function parse_str($string)
     {
-        parse_str($string,$arr);
+        parse_str($string, $arr);
         $new_arr = [];
         foreach($arr as $k=>$v){
-            if ( false !== strpos($k,'_') &&
-                    false === strpos($string,$k)
-               ) {
-                $new_k = str_replace('_','.',$k);
-                if (false!==strpos($string,$new_k)) {
+            if (false !== strpos($k, '_') 
+                && false === strpos($string, $k)
+            ) {
+                $new_k = str_replace('_', '.', $k);
+                if (false!==strpos($string, $new_k)) {
                     $new_arr[$new_k] = $v;
                     unset($arr[$k]);
                 }
             }
         }
-        $arr = array_replace($arr,$new_arr);
+        $arr = array_replace($arr, $new_arr);
         return $arr;
     }
     

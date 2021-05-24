@@ -53,7 +53,7 @@ class UrlObject extends \PMVC\HashMap
             }
         }
         if (!empty($url[PATH])) {
-            if(!empty($url[HOST])){
+            if(!empty($url[HOST])) {
                 $this->prependPath($url[PATH]);
             }else{
                 $this->appendPath($url[PATH]);
@@ -61,7 +61,7 @@ class UrlObject extends \PMVC\HashMap
             unset($url[PATH]);
         }
         if ($url) {
-            \PMVC\set($this,$url);
+            \PMVC\set($this, $url);
         }
         return $this;
     }
@@ -71,7 +71,7 @@ class UrlObject extends \PMVC\HashMap
         if (is_array($path)) {
             return $path;
         }
-        $path = explode('/',$path);
+        $path = explode('/', $path);
         return $path;
     }
 
@@ -84,7 +84,7 @@ class UrlObject extends \PMVC\HashMap
         if (empty($path[0]) && !empty($this[PATH]) && 1 < count($path)) {
             array_shift($path);
         }
-        $this[PATH] = array_merge($this[PATH],$path);
+        $this[PATH] = array_merge($this[PATH], $path);
     }
 
     function prependPath($path)
@@ -93,10 +93,10 @@ class UrlObject extends \PMVC\HashMap
         if (empty($this[PATH][0])) {
             array_shift($this[PATH]);
         }
-        if ( empty(end($path)) && !empty($this[PATH]) ) {
+        if (empty(end($path)) && !empty($this[PATH]) ) {
             array_pop($path);
         }
-        $this[PATH] = array_merge($path,$this[PATH]);
+        $this[PATH] = array_merge($path, $this[PATH]);
     }
 
     function stringify()
@@ -118,7 +118,7 @@ class UrlObject extends \PMVC\HashMap
         $path     = $this->getPath();
         $path     = (( 
             $host && 
-            0!==strpos($path,'/') &&  
+            0!==strpos($path, '/') &&  
             ($path || $query)
         ) ? '/' : '').$path;
         $fragment = !empty($this[FRAGMENT])?'#'. $this[FRAGMENT] : ''; 
@@ -127,7 +127,7 @@ class UrlObject extends \PMVC\HashMap
 
     public function getPath()
     {
-        return implode( '/', $this[PATH]);
+        return implode('/', $this[PATH]);
     }
 
     public function path($path)
