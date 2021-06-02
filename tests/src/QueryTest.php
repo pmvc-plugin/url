@@ -10,7 +10,7 @@ class QueryTest extends TestCase
 
     function pmvc_setup()
     {
-        PMVC\plug($this->_plug, [\PMVC\PAUSE=>true]);
+        PMVC\replug($this->_plug);
     }
 
     function testBaseQuery()
