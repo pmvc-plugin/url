@@ -3,12 +3,12 @@ namespace PMVC\PlugIn\url;
 
 use PMVC\Event;
 
-${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\url';
+${_INIT_CONFIG}[_CLASS] = __NAMESPACE__ . '\url';
 
-\PMVC\l(__DIR__.'/src/UrlObject.php');
-\PMVC\l(__DIR__.'/src/Query.php');
+\PMVC\l(__DIR__ . '/src/UrlObject.php');
+\PMVC\l(__DIR__ . '/src/Query.php');
 
-\PMVC\initPlugIn(['getenv'=>null]);
+\PMVC\initPlugIn(['getenv' => null]);
 
 class url extends \PMVC\PlugIn
 {
@@ -17,13 +17,13 @@ class url extends \PMVC\PlugIn
      *
      * @var string
      */
-    private $_protocol=null;
+    private $_protocol = null;
 
-     /**
-      * Cache getpath.
-      *
-      * @var string
-      */
+    /**
+     * Cache getpath.
+     *
+     * @var string
+     */
     private $_path;
 
     /**
@@ -33,7 +33,7 @@ class url extends \PMVC\PlugIn
     {
         $env = \PMVC\plug('getenv');
         foreach ($arr as $key) {
-            if ($overwrite || !isset($this[$key]) ) {
+            if ($overwrite || !isset($this[$key])) {
                 $val = $env->get($key);
                 if ($val) {
                     $this[$key] = $val;
@@ -41,7 +41,7 @@ class url extends \PMVC\PlugIn
             }
         }
     }
-    
+
     /**
      * Get Url
      */
@@ -50,8 +50,8 @@ class url extends \PMVC\PlugIn
         if (!is_object($url)) {
             return new UrlObject($url);
         } else {
-            if (!is_a($url, __NAMESPACE__.'\UrlObject')) {
-                trigger_error('It is not url object.'.print_r($url, true));
+            if (!is_a($url, __NAMESPACE__ . '\UrlObject')) {
+                trigger_error('It is not url object.' . print_r($url, true));
             }
             return $url;
         }
@@ -65,22 +65,22 @@ class url extends \PMVC\PlugIn
         return new Query($query);
     }
 
-     /**
-      * Set Url
-      */
-    public function seturl($url,$key,$value)
+    /**
+     * Set Url
+     */
+    public function seturl($url, $key, $value)
     {
-        $reg = '/([#?&]'.$key.'=)[^&#]*/';
+        $reg = '/([#?&]' . $key . '=)[^&#]*/';
         preg_match($reg, $url, $match);
-        if(!empty($match)) {
-            $url = preg_replace($reg, '${1}'.$value, $url);
-        }else{
-            $url.=(false === strpos($url, '?')) ? '?' : '&'; 
-            $url.=$key.'='.urlencode($value);
-        }   
+        if (!empty($match)) {
+            $url = preg_replace($reg, '${1}' . $value, $url);
+        } else {
+            $url .= false === strpos($url, '?') ? '?' : '&';
+            $url .= $key . '=' . urlencode($value);
+        }
         return $url;
-    } 
-    
+    }
+
     public function getRunPhp()
     {
         return basename($this['SCRIPT_NAME']);
@@ -98,33 +98,33 @@ class url extends \PMVC\PlugIn
             return $this->_path;
         }
         $uri = $this['REQUEST_URI'];
-        $s='/';
+        $s = '/';
         if (empty($uri)) {
             $this->_path = $s;
             return $s;
         }
-        $scriptFolder = dirname($this['SCRIPT_NAME']).'/?';
-        if (empty($this['SCRIPT_NAME'])  
-            || ( false === strpos($this['SCRIPT_NAME'], $uri)  
-            && false === strpos($uri, $this['SCRIPT_NAME']) 
-            && false === strpos($uri, $scriptFolder) // http://xxx/?/path
-            )
+        $scriptFolder = dirname($this['SCRIPT_NAME']) . '/?';
+        if (
+            empty($this['SCRIPT_NAME']) ||
+            (false === strpos($this['SCRIPT_NAME'], $uri) &&
+                false === strpos($uri, $this['SCRIPT_NAME']) &&
+                false === strpos($uri, $scriptFolder)) // http://xxx/?/path
         ) {
             // http://xxx/path use rewrite rule
             $s = $this->getUrl($uri)->getPath();
         } elseif (false !== strpos($uri, $this['SCRIPT_NAME'])) {
             // http://xxx/index.php/path
             $run = $this->getRunPhp();
-            $start = strpos($uri, $run)+ strlen($run);
+            $start = strpos($uri, $run) + strlen($run);
             $s = substr($uri, $start);
         }
         if (empty($s)) {
             $s = '/';
         }
-        if (0===strpos($s, '?')) {
-            $s = substr($s, 1); 
+        if (0 === strpos($s, '?')) {
+            $s = substr($s, 1);
         }
-        if (false!==strpos($s, '?')) {
+        if (false !== strpos($s, '?')) {
             $s = substr($s, 0, strpos($s, '?'));
         }
         $this->_path = $s;
@@ -141,7 +141,7 @@ class url extends \PMVC\PlugIn
         $path = $this->getPath();
         // clean querystring
         $url = explode('?', $this['REQUEST_URI'])[0];
-        if ($path && !('/'===$path && '/'!==substr($url, -1))) {
+        if ($path && !('/' === $path && '/' !== substr($url, -1))) {
             $end = strrpos($url, $path);
             $url = substr($url, 0, $end);
         }
@@ -152,11 +152,11 @@ class url extends \PMVC\PlugIn
     {
         $url = $this->getUrl($path);
         if (empty($url->scheme) && empty($url->host)) {
-            return \PMVC\getOption('realUrl').$path;
+            return \PMVC\getOption('realUrl') . $path;
         } else {
             return $this->toHttp($url);
         }
-    } 
+    }
 
     /**
      * get http or https
@@ -164,7 +164,10 @@ class url extends \PMVC\PlugIn
     public function getProtocol()
     {
         if (empty($this->_protocol)) {
-            $this->_protocol = ('on' !== $this['HTTPS'] && 443 !== $this[PORT]) ? 'http' : 'https';
+            $this->_protocol =
+                'on' !== $this['HTTPS'] && 443 !== $this[PORT]
+                    ? 'http'
+                    : 'https';
         }
         return $this->_protocol;
     }
@@ -179,7 +182,7 @@ class url extends \PMVC\PlugIn
      *
      * @return string
      */
-    public function toHttp($url, $scheme=null)
+    public function toHttp($url, $scheme = null)
     {
         $url = $this->getUrl($url);
         if (empty($url->scheme)) {
@@ -190,29 +193,30 @@ class url extends \PMVC\PlugIn
         }
         if (empty($url->host)) {
             $url->host = $this[HOST];
-        }
-        if (empty($url->port)) {
-            $isCommonPort = $this[PORT] === 443 || $this[PORT] === 80;
-            $is80 = 'http' === $url->scheme && $isCommonPort;
-            $is443 = 'https' === $url->scheme && $isCommonPort;
-            if (!$is80 && !$is443) {
-                $url->port = $this[PORT];
+            if (empty($url->port)) {
+                $isCommonPort = $this[PORT] === 443 || $this[PORT] === 80;
+                $is80 = 'http' === $url->scheme && $isCommonPort;
+                $is443 = 'https' === $url->scheme && $isCommonPort;
+                if (!$is80 && !$is443) {
+                    $url->port = $this[PORT];
+                }
             }
         }
-        return (string)$url;
+        return (string) $url;
     }
 
     public function initEnv()
     {
         $this->setEnv(
             [
-            'HTTPS',
-            'HTTP_HOST',
-            'HTTP_X_FORWARDED_PROTO',
-            'HTTP_X_FORWARDED_HOST',
-            'SCRIPT_NAME',
-            'REQUEST_URI'
-            ], false
+                'HTTPS',
+                'HTTP_HOST',
+                'HTTP_X_FORWARDED_PROTO',
+                'HTTP_X_FORWARDED_HOST',
+                'SCRIPT_NAME',
+                'REQUEST_URI',
+            ],
+            false
         );
         if ('https' === $this['HTTP_X_FORWARDED_PROTO']) {
             $this['HTTPS'] = 'on';
@@ -228,21 +232,17 @@ class url extends \PMVC\PlugIn
 
     private function _initDefaultHost()
     {
-        $oUrl = $this->getUrl('//'.$this['HTTP_HOST']);
+        $oUrl = $this->getUrl('//' . $this['HTTP_HOST']);
         $this[HOST] = $oUrl[HOST];
         $this[PORT] = $oUrl[PORT];
     }
 
     public function init()
     {
-        \PMVC\callPlugin(
-            'dispatcher',
-            'attachAfter',
-            [ 
-                $this,
-                Event\MAP_REQUEST,
-            ]
-        );
+        \PMVC\callPlugin('dispatcher', 'attachAfter', [
+            $this,
+            Event\MAP_REQUEST,
+        ]);
         $this->initEnv();
     }
 
