@@ -227,7 +227,7 @@ class url extends \PMVC\PlugIn
             $this['HTTP_HOST'] = $host[0];
         }
         $this->_initDefaultHost();
-        $this['REQUEST_URI'] = str_replace('#', '%23', $this['REQUEST_URI']);
+        $this['REQUEST_URI'] = str_replace('#', '%23', \PMVC\get($this, 'REQUEST_URI', ''));
     }
 
     private function _initDefaultHost()
