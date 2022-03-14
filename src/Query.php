@@ -30,16 +30,18 @@ class Query extends HashMap
         }
     }
 
-    static public function parse_str($string)
+    /**
+     * Handle dots and spaces case
+     * @see https://www.php.net/manual/en/function.parse-str.php#example-4814
+     */
+    public static function parse_str($string)
     {
         parse_str($string, $arr);
         $new_arr = [];
-        foreach($arr as $k=>$v){
-            if (false !== strpos($k, '_') 
-                && false === strpos($string, $k)
-            ) {
+        foreach ($arr as $k => $v) {
+            if (false !== strpos($k, '_') && false === strpos($string, $k)) {
                 $new_k = str_replace('_', '.', $k);
-                if (false!==strpos($string, $new_k)) {
+                if (false !== strpos($string, $new_k)) {
                     $new_arr[$new_k] = $v;
                     unset($arr[$k]);
                 }
@@ -48,7 +50,7 @@ class Query extends HashMap
         $arr = array_replace($arr, $new_arr);
         return $arr;
     }
-    
+
     /**
      * More options
      * http://php.net/manual/en/function.http-build-query.php
@@ -62,10 +64,7 @@ class Query extends HashMap
         $params = func_get_args();
         ksort($array);
         array_unshift($params, $array);
-        return call_user_func_array(
-            'http_build_query',
-            $params
-        );
+        return call_user_func_array('http_build_query', $params);
     }
 
     public function __get($k)
@@ -73,8 +72,8 @@ class Query extends HashMap
         return $this[$k];
     }
 
-    public function __tostring()
+    public function __toString()
     {
-        return (string)$this->stringify();
+        return (string) $this->stringify();
     }
 }
